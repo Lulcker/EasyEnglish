@@ -1,0 +1,16 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using EasyEnglish.UI;
+using EasyEnglish.UI.Configurators;
+
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
+
+builder
+    .ConfigureHelpers()
+    .ConfigureMudBlazor()
+    .ConfigureHttpClient()
+    .ConfigureExceptionHandler();
+
+await builder.Build().RunAsync();

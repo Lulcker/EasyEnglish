@@ -1,0 +1,15 @@
+﻿<div class="flip-card" @onclick="FlipCard">
+    <div class="flip-card-inner @(IsFlipped ? "flipped" : "")">
+        <MudPaper Class="flip-card-front card-face" Elevation="3">
+            <MudText Typo="Typo.h6" Align="Align.Center">
+                @Card.EnWord
+            </MudText>
+        </MudPaper>
+        <MudPaper Class="flip-card-back card-face" Elevation="3">
+            <MudText Typo="Typo.h6" Align="Align.Center">
+                @Card.RuWord
+            </MudText>
+        </MudPaper>
+    </div>
+</div>
+

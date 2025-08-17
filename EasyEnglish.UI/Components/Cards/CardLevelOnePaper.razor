@@ -1,0 +1,31 @@
+﻿<MudPaper Elevation="3" Class="pa-4 mb-5 position-relative">
+    <MudText Typo="Typo.caption" Class="menu-position">
+        @Index / @CardsCount
+    </MudText>
+    <MudText Typo="Typo.h6" Class="mb-5">
+        @Card.RuWord
+    </MudText>
+    <MudText Class="mb-2">
+        Выберите ответ
+    </MudText>
+    <MudGrid Spacing="2">
+        @foreach (var variant in answerVariants)
+        {
+            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                <MudPaper @onclick="@(() => SetAnswer(variant))"
+                          Outlined Class="@(GetPaperClass(variant))">
+                    <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3">
+                        @if (answer.IsNotEmpty() && answer == variant)
+                        {
+                            <MudIcon Color="@(isCorrectAnswer ? Color.Success : Color.Error)"
+                                     Icon="@(isCorrectAnswer ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Close)" />
+                        }
+                        <MudText>
+                            @variant
+                        </MudText>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudPaper>

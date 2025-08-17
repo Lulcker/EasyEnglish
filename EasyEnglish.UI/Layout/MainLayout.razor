@@ -1,0 +1,26 @@
+﻿@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+<div class="page">
+    <main>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<MudThemeProvider Theme="Theme" />
+<MudPopoverProvider />
+<MudDialogProvider CloseButton="true" />
+<MudSnackbarProvider />
+
+@code {
+
+    private static readonly MudTheme Theme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Surface = MudColor.Parse("#FFFFFF")
+        }
+    };
+
+}

@@ -1,0 +1,77 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using EasyEnglish.Application.Commands.Cards;
+using EasyEnglish.Application.Queries.Cards;
+using EasyEnglish.DTO.Cards.RequestModels;
+using EasyEnglish.DTO.Cards.ResponseModels;
+
+namespace EasyEnglish.Controllers;
+
+/// <summary>
+/// Контроллер карточек
+/// </summary>
+[ApiController]
+[Route("api/card")]
+public class CardController(
+    AllCardsByCollectionIdQuery allCardsByCollectionIdQuery,
+    CreateCardCommand createCardCommand,
+    UpdateCardCommand updateCardCommand,
+    DeleteCardCommand deleteCardCommand
+) : ControllerBase
+{
+    #region GET
+
+    /// <summary>
+    /// Получение списка карточек в коллекции
+    /// </summary>
+    /// <returns>Список карточек в коллекции</returns>
+    [HttpGet("all-by-collection/{cardCollectionId:guid}")]
+    public async Task<ActionResult<IReadOnlyCollection<CardResponseModel>>> AllByCollectionIdAsync([FromRoute] Guid cardCollectionId) =>
+        Ok(await allCardsByCollectionIdQuery.ExecuteAsync(cardCollectionId));
+
+    #endregion
+
+    #region POST
+
+    /// <summary>
+    /// Создание карточки
+    /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateCardRequestModel requestModel)
+    {
+        await createCardCommand.ExecuteAsync(requestModel);
+        return Ok();
+    }
+
+    #endregion
+
+    #region PATCH
+
+    /// <summary>
+    /// Обновление карточки
+    /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    [HttpPatch("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCardRequestModel requestModel)
+    {
+        await updateCardCommand.ExecuteAsync(requestModel);
+        return Ok();
+    }
+
+    #endregion
+
+    #region DELETE
+
+    /// <summary>
+    /// Удаление карточки
+    /// </summary>
+    /// <param name="cardId">Id карточки</param>
+    [HttpDelete("delete/{cardId:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid cardId)
+    {
+        await deleteCardCommand.ExecuteAsync(cardId);
+        return Ok();
+    }
+
+    #endregion
+}

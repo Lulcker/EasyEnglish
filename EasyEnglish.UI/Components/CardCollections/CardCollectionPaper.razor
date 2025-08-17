@@ -1,0 +1,56 @@
+﻿<MudPaper Elevation="3" Class="pa-4 mb-3 position-relative"
+          @onclick="OpenCardCollectionPage">
+    @if (isEditMode)
+    {
+        <MudTextField Label="Название коллекции"
+                      @bind-Value="newTitle"
+                      Variant="Variant.Outlined" Immediate
+                      Class="mb-2"/>
+
+        <MudStack Row AlignItems="AlignItems.Center">
+            <MudButton OnClick="UnsetAndClearUpdateMode"
+                       Color="Color.Primary" Class="mt-1"
+                       Variant="Variant.Outlined">
+                Отменить
+            </MudButton>
+                    
+            <MudSpacer />
+                    
+            <MudButton OnClick="SaveAsync"
+                       Disabled="IsSaveButtonDisabled"
+                       Color="Color.Primary" Class="mt-1"
+                       Variant="Variant.Filled">
+                Сохранить
+            </MudButton>
+        </MudStack>
+                
+        @if (isLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="isLoading"
+                               Class="mt-2" />
+        }
+    }
+    else
+    {
+        <MudStack Spacing="2">
+            <MudText Typo="Typo.h6">
+                @CardCollection.Title
+            </MudText>
+            <MudText>
+                Количество карточек: @CardCollection.CardsCount
+            </MudText>
+        </MudStack>
+        <div class="menu-position">
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense>
+                <MudMenuItem OnClick="SetUpdateMode" IconColor="Color.Primary"
+                             Icon="@Icons.Material.Filled.Edit">
+                    Редактировать
+                </MudMenuItem>
+                <MudMenuItem OnClick="DeleteAsync" IconColor="Color.Error"
+                             Icon="@Icons.Material.Filled.Delete">
+                    Удалить
+                </MudMenuItem>
+            </MudMenu>
+        </div>
+    }
+</MudPaper>

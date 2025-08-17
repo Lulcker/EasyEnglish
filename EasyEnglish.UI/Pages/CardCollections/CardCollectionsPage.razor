@@ -1,0 +1,67 @@
+﻿@page "/"
+@page "/card-collections"
+
+<PageTitle>EasyEnglish | Коллекции</PageTitle>
+
+<div class="card-collection-main">
+    <div class="card-collection-container">
+        <MudText Typo="Typo.h4" Class="mb-4">
+            Коллекции карточек
+        </MudText>
+
+        @if (cardCollections.Count == 0 && !isDataLoading)
+        {
+            <MudText Typo="Typo.h5" Class="mb-3">
+                Нет коллекций карточек
+            </MudText>
+        }
+
+        @if (!isAddedMode)
+        {
+            <MudButton OnClick="SetAddedMode"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       Color="Color.Primary" Class="mb-3"
+                       Variant="Variant.Outlined">
+                Добавить
+            </MudButton>
+        }
+        else
+        {
+            <MudPaper Class="pa-4 mb-3">
+                <MudTextField Label="Название коллекции"
+                              @bind-Value="newCollectionTitle"
+                              Variant="Variant.Outlined" Immediate
+                              Class="mb-2"/>
+
+                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudButton OnClick="UnsetAndClearAddedMode"
+                               Color="Color.Primary" Class="mt-1"
+                               Variant="Variant.Outlined">
+                        Отменить
+                    </MudButton>
+
+                    <MudSpacer/>
+
+                    <MudButton OnClick="Save"
+                               Disabled="IsSaveButtonDisabled"
+                               Color="Color.Primary" Class="mt-1"
+                               Variant="Variant.Filled">
+                        Сохранить
+                    </MudButton>
+                </MudStack>
+
+                @if (isUpdateLoading)
+                {
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="isUpdateLoading"
+                                       Class="mt-2"/>
+                }
+            </MudPaper>
+        }
+
+        @foreach (var cardCollection in cardCollections)
+        {
+            <CardCollectionPaper CardCollection="cardCollection"
+                                 OnSave="LoadDataAsync"/>
+        }
+    </div>
+</div>

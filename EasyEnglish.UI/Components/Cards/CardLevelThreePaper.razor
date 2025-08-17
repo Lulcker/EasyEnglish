@@ -1,0 +1,54 @@
+﻿<MudPaper Elevation="3" Class="pa-4" Height="180px">
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-3">
+        @Card.RuWord
+    </MudText>
+    
+    @if (!IsCorrectAnswer.HasValue)
+    {
+        <MudTextField T="string" FullWidth Variant="Variant.Outlined"
+                      Placeholder="Ответ" Value="Answer"
+                      ReadOnly="IsCorrectAnswer.HasValue"
+                      ValueChanged="@(v => UpdateAnswer(v))"
+                      Immediate Class="mb-3" />
+        
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Disabled="@(Answer.IsEmpty())"
+                   OnClick="CheckAnswer">
+            Проверить
+        </MudButton>
+    }
+    @if (IsCorrectAnswer.HasValue && IsCorrectAnswer.Value)
+    {
+        <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3 h-56">
+                <MudIcon Color="Color.Success"
+                         Icon="@Icons.Material.Outlined.Check" />
+                
+                <MudText>
+                    @Answer
+                </MudText>
+            </MudStack>
+        </MudPaper>
+        
+        <MudText>Правильный ответ!</MudText>
+    }
+    else if (IsCorrectAnswer.HasValue && !IsCorrectAnswer.Value)
+    {
+        <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3  h-56">
+                <MudIcon Color="Color.Error"
+                         Icon="@Icons.Material.Outlined.Close" />
+                
+                <MudText>
+                    @Answer
+                </MudText>
+            </MudStack>
+        </MudPaper>
+        
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Wrap="Wrap.Wrap">
+            <MudText>Правильный ответ:</MudText>
+            <MudText Color="Color.Success"><b>@Card.EnWord</b></MudText>
+        </MudStack>
+    }
+</MudPaper>

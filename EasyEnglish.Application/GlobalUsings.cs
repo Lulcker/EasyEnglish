@@ -1,0 +1,1 @@
+﻿global using EasyEnglish.Application.Extensions;
