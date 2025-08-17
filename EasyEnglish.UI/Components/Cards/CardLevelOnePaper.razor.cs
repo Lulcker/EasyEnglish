@@ -59,6 +59,9 @@ public partial class CardLevelOnePaper : ComponentBase
     {
         if (answer.IsEmpty())
             return "paper-not-answer";
+        
+        if (Card.EnWord == variant)
+            return "paper-correct-answer";
 
         return isCorrectAnswer switch
         {

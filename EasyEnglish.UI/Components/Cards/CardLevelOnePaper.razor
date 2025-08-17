@@ -11,7 +11,7 @@
     <MudGrid Spacing="2">
         @foreach (var variant in answerVariants)
         {
-            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
                 <MudPaper @onclick="@(() => SetAnswer(variant))"
                           Outlined Class="@(GetPaperClass(variant))">
                     <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3">
@@ -19,6 +19,11 @@
                         {
                             <MudIcon Color="@(isCorrectAnswer ? Color.Success : Color.Error)"
                                      Icon="@(isCorrectAnswer ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Close)" />
+                        }
+                        else if (answer.IsNotEmpty() && Card.EnWord == variant)
+                        {
+                            <MudIcon Color="Color.Success"
+                                     Icon="@Icons.Material.Outlined.Check" />
                         }
                         <MudText>
                             @variant
