@@ -25,6 +25,7 @@ services:
     container_name: easy_english_api
     environment:
       ConnectionStrings__Postgres: "${DB_CONNECTION_STRING}"
+      WebBaseUrl: ${WEB_BASE_URL}
     depends_on:
       - db
     ports:
@@ -59,4 +60,4 @@ volumes:
   
 networks:
   dev:
-    driver: bridge 
+    driver: bridge
