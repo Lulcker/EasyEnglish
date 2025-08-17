@@ -45,7 +45,7 @@ services:
     depends_on:
       - api
     ports:
-      - "80:80"
+      - "8001:80"
     restart: always
     networks:
       - dev
