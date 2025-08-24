@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace EasyEnglish.Application.Commands.Cards;
 public class UpdateCardCommand(
     IRepository<Card> cardRepository,
     IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
     ILogger<UpdateCardCommand> logger
 )
 {
@@ -22,9 +24,13 @@ public class UpdateCardCommand(
         requestModel.EnWord.ThrowIfEmpty("Не написано английское слово");
 
         var card = await cardRepository
+            .Include(c => c.CardCollection)
             .SingleOrDefaultAsync(c => c.Id == requestModel.Id);
         
         card.ThrowIfNull("Карточка не найдена");
+        
+        (card.CardCollection.UserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
 
         var oldRuWord = card.RuWord;
         var oldEnWord = card.EnWord;
@@ -34,7 +40,7 @@ public class UpdateCardCommand(
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord}",
-            oldRuWord, card.RuWord, oldEnWord, card.EnWord);
+        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord}  пользователем с Email: {UserEmail}",
+            oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email);
     }
 }

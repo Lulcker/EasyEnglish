@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public class CreateCardCommand(
     IRepository<Card> cardRepository,
     IRepository<CardCollection> cardCollectionRepository,
     IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
     ILogger<CreateCardCommand> logger
 )
 {
@@ -27,6 +29,9 @@ public class CreateCardCommand(
             .SingleOrDefaultAsync(c => c.Id == requestModel.CardCollectionId);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
+        
+        (cardCollection.UserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
 
         var card = await cardRepository
             .SingleOrDefaultAsync(c => c.CardCollectionId == requestModel.CardCollectionId &&
@@ -45,7 +50,7 @@ public class CreateCardCommand(
         cardRepository.Add(card);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}",
-            card.RuWord, card.EnWord, cardCollection.Title);
+        logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}  пользователем с Email: {UserEmail}",
+            card.RuWord, card.EnWord, cardCollection.Title, userInfoProvider.Email);
     }
 }

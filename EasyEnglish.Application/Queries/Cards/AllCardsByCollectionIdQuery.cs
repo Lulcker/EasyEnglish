@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,24 @@ namespace EasyEnglish.Application.Queries.Cards;
 /// <summary>
 /// Запрос получения списка карточек в коллекции
 /// </summary>
-public class AllCardsByCollectionIdQuery(IRepository<Card> cardCollectionRepository)
+public class AllCardsByCollectionIdQuery(
+    IRepository<Card> cardRepository,
+    IRepository<CardCollection> cardCollectionRepository,
+    IUserInfoProvider userInfoProvider
+    )
 {
     public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync(Guid cardCollectionId)
     {
-        return await cardCollectionRepository
+        var cardCollectionUserId = await cardCollectionRepository
+            .AsNoTracking()
+            .Where(c => c.Id == cardCollectionId)
+            .Select(c => c.UserId)
+            .SingleOrDefaultAsync();
+        
+        (cardCollectionUserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
+        
+        return await cardRepository
             .AsNoTracking()
             .Where(c => c.CardCollectionId == cardCollectionId)
             .Select(c => new CardResponseModel

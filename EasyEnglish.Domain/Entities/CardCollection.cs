@@ -16,6 +16,16 @@ public class CardCollection : EntityBase
     /// Дата создания
     /// </summary>
     public required DateTime CreatedAt { get; init; }
+    
+    /// <summary>
+    /// Id пользователя
+    /// </summary>
+    public required Guid UserId { get; init; }
+
+    /// <summary>
+    /// Пользователь
+    /// </summary>
+    public User User { get; init; } = null!;
 
     /// <summary>
     /// Карточки

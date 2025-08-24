@@ -50,4 +50,14 @@ internal static class ValidationExtensions
         if (!condition)
             throw new BusinessException(message);
     }
+    
+    /// <summary>
+    /// Выкидывает ошибку доступа, если выражение неверное
+    /// </summary>
+    /// <param name="condition">Выражение</param>
+    public static void ThrowAccessIfInvalidCondition(this bool condition)
+    {
+        if (!condition)
+            throw new AccessDeniedException();
+    }
 }

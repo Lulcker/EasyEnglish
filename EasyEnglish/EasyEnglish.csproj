@@ -10,10 +10,12 @@
     
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\EasyEnglish.Application\EasyEnglish.Application.csproj" />
+      <ProjectReference Include="..\EasyEnglish.Infrastructure\EasyEnglish.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

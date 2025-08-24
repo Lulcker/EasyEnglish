@@ -21,15 +21,17 @@ internal static class ExceptionHandlerConfigurator
 }
 
 internal class ExceptionProvider(
+    IUserSession userSession,
     ISnackbarHelper snackbarHelper
 ) : ILoggerProvider
 {
-    public ILogger CreateLogger(string categoryName) => new ExceptionHandler(snackbarHelper);
+    public ILogger CreateLogger(string categoryName) => new ExceptionHandler(userSession, snackbarHelper);
     
     public void Dispose() => GC.SuppressFinalize(this);
 }
 
 public class ExceptionHandler(
+    IUserSession userSession,
     ISnackbarHelper snackbarHelper
 ) : ILogger
 {
@@ -38,7 +40,7 @@ public class ExceptionHandler(
         switch (exception)
         {
             case AccessDeniedException:
-                //_ = moderatorSession.EndSession();
+                _ = userSession.EndSession();
                 break;
             case InternalServerErrorException:
             case BusinessException:

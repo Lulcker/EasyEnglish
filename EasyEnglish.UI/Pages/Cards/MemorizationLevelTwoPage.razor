@@ -2,31 +2,27 @@
 
 <PageTitle>EasyEnglish | @cardCollection?.Title | Уровень 2</PageTitle>
 
-<div class="card-collection-main">
-    <div class="card-collection-container">
-        <MudBreadcrumbs Class="mb-3" Items="breadcrumbItems" />
-        
-        @if (cardCollection is not null && currentCard is not null)
-        {
-            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-1">
-                @cardCollection.Title
-            </MudText>
-            <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-5">
-                @(currentCardIndex + 1) / @cards.Count
-            </MudText>
+<MudBreadcrumbs Class="mb-3" Items="breadcrumbItems" />
 
-            <CardLevelTwoPaper Card="currentCard"
-                               @bind-IsFlipped="isFlipped"/>
+@if (cardCollection is not null && currentCard is not null)
+{
+    <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-1">
+        @cardCollection.Title
+    </MudText>
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-5">
+        @(currentCardIndex + 1) / @cards.Count
+    </MudText>
 
-            <MudStack Row AlignItems="AlignItems.Center" Class="mt-3">
-                <MudIconButton OnClick="PreviousCard"
-                               Disabled="@(currentCardIndex == 0)"
-                               Icon="@Icons.Material.Filled.ArrowBackIos"/>
-                <MudSpacer/>
-                <MudIconButton OnClick="NextCard"
-                               Disabled="@(currentCardIndex >= cards.Count - 1)"
-                               Icon="@Icons.Material.Filled.ArrowForwardIos"/>
-            </MudStack>
-        }
-    </div>
-</div>
+    <CardLevelTwoPaper Card="currentCard"
+                       @bind-IsFlipped="isFlipped"/>
+
+    <MudStack Row AlignItems="AlignItems.Center" Class="mt-3">
+        <MudIconButton OnClick="PreviousCard"
+                       Disabled="@(currentCardIndex == 0)"
+                       Icon="@Icons.Material.Filled.ArrowBackIos"/>
+        <MudSpacer/>
+        <MudIconButton OnClick="NextCard"
+                       Disabled="@(currentCardIndex >= cards.Count - 1)"
+                       Icon="@Icons.Material.Filled.ArrowForwardIos"/>
+    </MudStack>
+}

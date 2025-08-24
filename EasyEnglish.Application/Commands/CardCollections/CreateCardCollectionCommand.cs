@@ -1,4 +1,6 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Application.Contracts.Services;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.CardCollections.RequestModels;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ namespace EasyEnglish.Application.Commands.CardCollections;
 public class CreateCardCollectionCommand(
     IRepository<CardCollection> cardCollectionRepository,
     IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
     ILogger<CreateCardCollectionCommand> logger
     )
 {
@@ -27,13 +30,15 @@ public class CreateCardCollectionCommand(
         cardCollection = new CardCollection
         {
             Title = requestModel.Title.Trim().UppercaseFirstLetter(),
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UserId = userInfoProvider.Id
         };
 
         cardCollectionRepository.Add(cardCollection);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Создана коллекция {CarcCollectionTitle}", cardCollection.Title);
+        logger.LogInformation("Создана коллекция {CardCollectionTitle} пользователем с Email: {UserEmail}",
+            cardCollection.Title, userInfoProvider.Email);
 
         return cardCollection.Id;
     }

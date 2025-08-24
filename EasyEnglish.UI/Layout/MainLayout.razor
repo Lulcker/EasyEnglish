@@ -1,26 +1,29 @@
-﻿@using MudBlazor.Utilities
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
+
 <div class="page">
     <main>
-        <article class="content px-4">
-            @Body
+        <article class="content pr-4 pl-4">
+            <div class="main-center">
+                <div class="main-header">
+                    <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                        <MudSpacer />
+                        <MudText>
+                            @userSession.FirstName
+                        </MudText>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense Class="mr-5">
+                            <MudMenuItem Label="Выйти" OnClick="LogOutAsync"/>
+                        </MudMenu>
+                    </MudStack>
+                </div>
+                <div class="main-container">
+                    @Body
+                </div>
+            </div>
         </article>
     </main>
 </div>
 
-<MudThemeProvider Theme="Theme" />
+<MudThemeProvider />
 <MudPopoverProvider />
 <MudDialogProvider CloseButton="true" />
 <MudSnackbarProvider />
-
-@code {
-
-    private static readonly MudTheme Theme = new()
-    {
-        PaletteLight = new PaletteLight
-        {
-            Surface = MudColor.Parse("#FFFFFF")
-        }
-    };
-
-}

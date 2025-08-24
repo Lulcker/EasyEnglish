@@ -59,7 +59,7 @@ public partial class MemorizationLevelThreePage(
         breadcrumbItems =
         [
             new BreadcrumbItem("Коллекции", "/card-collections"),
-            new BreadcrumbItem($"Коллекция {cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
+            new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
             new BreadcrumbItem("Уровень 3", $"/memorization-level-three/{CardCollectionId}")
         ];
 

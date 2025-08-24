@@ -1,5 +1,6 @@
 ﻿using EasyEnglish.Core.Persistence;
 using EasyEnglish.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EasyEnglish.Persistence.Configs;
@@ -10,6 +11,7 @@ internal sealed class CardCollectionConfig : EntityTypeConfigurationBase<CardCol
     {
         builder.HasMany(p => p.Cards)
             .WithOne(g => g.CardCollection)
-            .HasForeignKey(g => g.CardCollectionId);
+            .HasForeignKey(g => g.CardCollectionId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

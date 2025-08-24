@@ -3,12 +3,14 @@ using EasyEnglish.Application.Commands.CardCollections;
 using EasyEnglish.Application.Queries.CardCollections;
 using EasyEnglish.DTO.CardCollections.RequestModels;
 using EasyEnglish.DTO.CardCollections.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EasyEnglish.Controllers;
 
 /// <summary>
 /// Контроллер коллекций карточек
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("api/card-collection")]
 public class CardCollectionController(

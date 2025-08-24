@@ -60,9 +60,43 @@ namespace EasyEnglish.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("CardCollection");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("EasyEnglish.Domain.Entities.Card", b =>
@@ -70,7 +104,7 @@ namespace EasyEnglish.Persistence.Migrations
                     b.HasOne("EasyEnglish.Domain.Entities.CardCollection", "CardCollection")
                         .WithMany("Cards")
                         .HasForeignKey("CardCollectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CardCollection");
@@ -78,7 +112,23 @@ namespace EasyEnglish.Persistence.Migrations
 
             modelBuilder.Entity("EasyEnglish.Domain.Entities.CardCollection", b =>
                 {
+                    b.HasOne("EasyEnglish.Domain.Entities.User", "User")
+                        .WithMany("CardCollections")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Domain.Entities.CardCollection", b =>
+                {
                     b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Domain.Entities.User", b =>
+                {
+                    b.Navigation("CardCollections");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ public class DeleteCardCollectionCommand(
     IRepository<Card> cardRepository,
     IRepository<CardCollection> cardCollectionRepository,
     IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
     ILogger<DeleteCardCollectionCommand> logger
 )
 {
@@ -23,12 +25,16 @@ public class DeleteCardCollectionCommand(
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
         
+        (cardCollection.UserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
+        
         if (cardCollection.Cards.Count > 0)
             cardRepository.RemoveRange(cardCollection.Cards);
         
         cardCollectionRepository.Remove(cardCollection);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Удалена коллекция {CardCollectionTitle}", cardCollection.Title);
+        logger.LogInformation("Удалена коллекция {CardCollectionTitle} пользователем с Email: {UserEmail}",
+            cardCollection.Title, userInfoProvider.Email);
     }
 }

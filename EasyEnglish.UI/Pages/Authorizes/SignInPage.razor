@@ -1,0 +1,92 @@
+﻿@page "/sign-in"
+
+<PageTitle>@(isLogin ? "Вход в EasyEnglish" : "Регистрация в EasyEnglish")</PageTitle>
+
+<div class="main-center justify-content-center vh-70">
+    <div class="main-container pl-4 pr-4">
+        @if (isLogin)
+        {
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-5">
+                Вход в аккаунт
+            </MudText>
+
+            <MudPaper Elevation="3" Class="pa-4">
+                <MudStack Justify="Justify.Center" Spacing="2">
+                    <MudTextField @bind-Value="email" Immediate Label="Почта"
+                                  Variant="Variant.Outlined" Class="mb-3"
+                                  InputType="InputType.Email" />
+
+                    <MudTextField @bind-Value="password" Immediate Label="Пароль"
+                                  Variant="Variant.Outlined" Class="mb-3"
+                                  InputType="InputType.Password" />
+
+                    <MudStack Row AlignItems="AlignItems.Center" Wrap="Wrap.WrapReverse">
+                        <MudText Inline>
+                            Нет аккаунта? 
+                            <MudLink OnClick="@(() => IsLoginChange(false))">
+                                Зарегистрироваться
+                            </MudLink>
+                        </MudText>
+
+                        <MudSpacer/>
+
+                        <MudButton OnClick="LoginAsync"
+                                   Disabled="IsLoginButtonDisabled"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary">
+                            Войти
+                        </MudButton>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        }
+        else
+        {
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-5">
+                Регистрация
+            </MudText>
+        
+            <MudPaper Elevation="3" Class="pa-4">
+                <MudStack Justify="Justify.Center" Spacing="2">
+                    <MudTextField @bind-Value="firstName" Immediate Label="Имя"
+                                  Variant="Variant.Outlined" Class="mb-3" />
+                
+                    <MudTextField @bind-Value="email" Immediate Label="Почта"
+                                  Variant="Variant.Outlined" Class="mb-3"
+                                  InputType="InputType.Email" />
+
+                    <MudTextField @bind-Value="password" Immediate Label="Пароль"
+                                  Variant="Variant.Outlined" Class="mb-3"
+                                  InputType="InputType.Password" />
+                
+                    <MudTextField @bind-Value="repeatPassword" Immediate Label="Повторение пароля"
+                                  Variant="Variant.Outlined" Class="mb-3"
+                                  InputType="InputType.Password" />
+
+                    <MudStack Row AlignItems="AlignItems.Center" Wrap="Wrap.WrapReverse">
+                        <MudText Inline>
+                            Есть аккаунт? 
+                            <MudLink OnClick="@(() => IsLoginChange(true))">
+                                Войти
+                            </MudLink>
+                        </MudText>
+
+                        <MudSpacer/>
+
+                        <MudButton OnClick="RegistrationAsync"
+                                   Disabled="IsRegistrationButtonDisabled"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary">
+                            Зарегистрироваться
+                        </MudButton>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        }
+    </div>
+</div>
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider CloseButton="true" />
+<MudSnackbarProvider />

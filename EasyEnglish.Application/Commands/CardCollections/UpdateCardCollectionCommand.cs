@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Domain.Entities;
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.CardCollections.RequestModels;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace EasyEnglish.Application.Commands.CardCollections;
 public class UpdateCardCollectionCommand(
     IRepository<CardCollection> cardCollectionRepository,
     IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
     ILogger<UpdateCardCollectionCommand> logger
 )
 {
@@ -21,6 +23,9 @@ public class UpdateCardCollectionCommand(
             .SingleOrDefaultAsync(c => c.Id == requestModel.Id);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
+        
+        (cardCollection.UserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
         
         var existsCardCollectionByTitle = await cardCollectionRepository
             .AsNoTracking()
@@ -34,7 +39,7 @@ public class UpdateCardCollectionCommand(
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлена коллекция Id: {CardCollectionId}, Название {OldCardCollectionTitle} -> {NewCardCollectionTitle}",
-            cardCollection.Id, oldCardCollectionTitle, cardCollection.Title);
+        logger.LogInformation("Обновлена коллекция Id: {CardCollectionId} пользователем с Email: {UserEmail}, Название {OldCardCollectionTitle} -> {NewCardCollectionTitle}",
+            cardCollection.Id, userInfoProvider.Email, oldCardCollectionTitle, cardCollection.Title);
     }
 }

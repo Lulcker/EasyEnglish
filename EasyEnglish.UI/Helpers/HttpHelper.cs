@@ -1,9 +1,12 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using EasyEnglish.DTO;
 using EasyEnglish.ProxyApiMethods;
+using EasyEnglish.UI.Contracts;
+using EasyEnglish.UI.Extensions;
 
 namespace EasyEnglish.UI.Helpers;
 
@@ -11,6 +14,7 @@ namespace EasyEnglish.UI.Helpers;
 /// Помощник HTTP запросов
 /// </summary>
 public class HttpHelper(
+    IUserSession userSession,
     HttpClient httpClient
     ) : IHttpHelper
 {
@@ -82,6 +86,9 @@ public class HttpHelper(
 
     private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage)
     {
+        if (userSession.Token.IsNotEmpty())
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userSession.Token);
+        
         HttpResponseMessage? response;
         
         try

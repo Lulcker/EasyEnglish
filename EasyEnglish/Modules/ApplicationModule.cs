@@ -9,7 +9,7 @@ internal class ApplicationModule : Module
     {
         builder
             .RegisterAssemblyTypes(typeof(CreateCardCommand).Assembly)
-            .Where(x => x.Name.EndsWith("Command") || x.Name.EndsWith("Query"))
+            .Where(x => x.Name.EndsWith("Command") || x.Name.EndsWith("Query") ||x.Name.EndsWith("Rule"))
             .AsImplementedInterfaces()
             .AsSelf()
             .InstancePerLifetimeScope();

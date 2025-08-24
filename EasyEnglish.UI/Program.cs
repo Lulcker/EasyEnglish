@@ -11,6 +11,8 @@ builder
     .ConfigureHelpers()
     .ConfigureMudBlazor()
     .ConfigureHttpClient()
+    .ConfigureLocalStorage()
+    .ConfigureAuthorization()
     .ConfigureExceptionHandler();
 
 await builder.Build().RunAsync();

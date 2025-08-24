@@ -1,12 +1,21 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
-        <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
-    </Found>
-    <NotFound>
-        <PageTitle>Страница не найдена</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Данной страницы не существует.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <Router AppAssembly="@typeof(App).Assembly">
+                <Found Context="routeData">
+                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+                    <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+                </Found>
+                <NotFound>
+                    <PageTitle>Страница не найдена</PageTitle>
+                    <LayoutView Layout="@typeof(MainLayout)">
+                        <p role="alert">Страница не найдена</p>
+                    </LayoutView>
+                </NotFound>
+            </Router>
+        </Authorized>
+        <NotAuthorized>
+            <SignInPage />
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>

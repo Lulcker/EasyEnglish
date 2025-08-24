@@ -113,6 +113,10 @@ code {
     text-align: start;
 }
 
+.mr-5 {
+    margin-right: 20px;
+}
+
 .pa-3 {
     padding: 12px;
 }
@@ -121,8 +125,20 @@ code {
     padding: 16px;
 }
 
+.pl-4 {
+    padding-left: 16px;
+}
+
+.pr-4 {
+    padding-right: 16px;
+}
+
 .h-56 {
     height: 56px;
+}
+
+.vh-70 {
+    height: 70vh;
 }
 
 .menu-position {
@@ -132,16 +148,16 @@ code {
     right: 10px;
 }
 
-.card-collection-main {
+.main-center {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.card-collection-container {
+.main-container {
     display: flex;
     flex-direction: column;
     width: 700px;
-    padding: 20px;
 
     @media (max-width: 710px) {
         width: 100%;

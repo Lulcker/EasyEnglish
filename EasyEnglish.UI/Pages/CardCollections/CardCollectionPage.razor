@@ -1,90 +1,86 @@
 ﻿@page "/card-collection/{CardCollectionId:guid}"
 
-<PageTitle>EasyEnglish | Коллекция @cardCollection?.Title</PageTitle>
+<PageTitle>EasyEnglish | @cardCollection?.Title</PageTitle>
 
-<div class="card-collection-main">
-    <div class="card-collection-container">
-        <MudBreadcrumbs Class="mb-3" Items="breadcrumbItems" />
-        
-        <MudText Typo="Typo.h4" Class="mb-4">
-            Коллекция @cardCollection?.Title
-        </MudText>
+<MudBreadcrumbs Class="mb-3" Items="breadcrumbItems" />
 
-        @if (cards.Count == 0 && !isDataLoading)
-        {
-            <MudText Typo="Typo.h5" Class="mb-3">
-                Нет карточек
-            </MudText>
-        }
-        else
-        {
-            <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" FullWidth Class="mb-5">
-                <MudButton OnClick="OpenLevelOnePage"
-                           Disabled="@(cards.Count < 4)">
-                    Уровень 1
-                </MudButton>
-                <MudButton OnClick="OpenLevelTwoPage"
-                           Disabled="@(cards.Count == 0)">
-                    Уровень 2
-                </MudButton>
-                <MudButton OnClick="OpenLevelThreePage"
-                           Disabled="@(cards.Count == 0)">
-                    Уровень 3
-                </MudButton>
-            </MudButtonGroup>
-        }
+<MudText Typo="Typo.h4" Class="mb-4">
+    @cardCollection?.Title
+</MudText>
 
-        @if (!isAddedMode)
-        {
-            <MudButton OnClick="SetAddedMode"
-                       StartIcon="@Icons.Material.Filled.Add"
-                       Color="Color.Primary" Class="mb-3"
+@if (cards.Count == 0 && !isDataLoading)
+{
+    <MudText Typo="Typo.h5" Class="mb-3">
+        Нет карточек
+    </MudText>
+}
+else
+{
+    <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" FullWidth Class="mb-5">
+        <MudButton OnClick="OpenLevelOnePage"
+                   Disabled="@(cards.Count < 4)">
+            Уровень 1
+        </MudButton>
+        <MudButton OnClick="OpenLevelTwoPage"
+                   Disabled="@(cards.Count == 0)">
+            Уровень 2
+        </MudButton>
+        <MudButton OnClick="OpenLevelThreePage"
+                   Disabled="@(cards.Count == 0)">
+            Уровень 3
+        </MudButton>
+    </MudButtonGroup>
+}
+
+@if (!isAddedMode)
+{
+    <MudButton OnClick="SetAddedMode"
+               StartIcon="@Icons.Material.Filled.Add"
+               Color="Color.Primary" Class="mb-3"
+               Variant="Variant.Outlined">
+        Добавить
+    </MudButton>
+}
+else
+{
+    <MudPaper Class="pa-4 mb-3">
+        <MudTextField Label="Слово на русском"
+                      @bind-Value="newRuWord"
+                      Variant="Variant.Outlined" Immediate
+                      Class="mb-2"/>
+
+        <MudTextField Label="Слово на английском"
+                      @bind-Value="newEnWord"
+                      Variant="Variant.Outlined" Immediate
+                      Class="mb-2"/>
+
+        <MudStack Row AlignItems="AlignItems.Center">
+            <MudButton OnClick="UnsetAndClearAddedMode"
+                       Color="Color.Primary" Class="mt-1"
                        Variant="Variant.Outlined">
-                Добавить
+                Отменить
             </MudButton>
-        }
-        else
+
+            <MudSpacer/>
+
+            <MudButton OnClick="SaveAsync"
+                       Disabled="IsSaveButtonDisabled"
+                       Color="Color.Primary" Class="mt-1"
+                       Variant="Variant.Filled">
+                Сохранить
+            </MudButton>
+        </MudStack>
+
+        @if (isUpdateLoading)
         {
-            <MudPaper Class="pa-4 mb-3">
-                <MudTextField Label="Слово на русском"
-                              @bind-Value="newRuWord"
-                              Variant="Variant.Outlined" Immediate
-                              Class="mb-2"/>
-
-                <MudTextField Label="Слово на английском"
-                              @bind-Value="newEnWord"
-                              Variant="Variant.Outlined" Immediate
-                              Class="mb-2"/>
-
-                <MudStack Row AlignItems="AlignItems.Center">
-                    <MudButton OnClick="UnsetAndClearAddedMode"
-                               Color="Color.Primary" Class="mt-1"
-                               Variant="Variant.Outlined">
-                        Отменить
-                    </MudButton>
-
-                    <MudSpacer/>
-
-                    <MudButton OnClick="SaveAsync"
-                               Disabled="IsSaveButtonDisabled"
-                               Color="Color.Primary" Class="mt-1"
-                               Variant="Variant.Filled">
-                        Сохранить
-                    </MudButton>
-                </MudStack>
-
-                @if (isUpdateLoading)
-                {
-                    <MudProgressLinear Color="Color.Primary" Indeterminate="isUpdateLoading"
-                                       Class="mt-2"/>
-                }
-            </MudPaper>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="isUpdateLoading"
+                               Class="mt-2"/>
         }
+    </MudPaper>
+}
 
-        @foreach (var card in cards)
-        {
-            <CardPaper Card="card"
-                       OnSave="LoadCardsAsync"/>
-        }
-    </div>
-</div>
+@foreach (var card in cards)
+{
+    <CardPaper Card="card"
+               OnSave="LoadCardsAsync"/>
+}

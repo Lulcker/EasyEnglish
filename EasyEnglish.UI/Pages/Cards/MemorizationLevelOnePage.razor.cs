@@ -55,7 +55,7 @@ public partial class MemorizationLevelOnePage(
         breadcrumbItems =
         [
             new BreadcrumbItem("Коллекции", "/card-collections"),
-            new BreadcrumbItem($"Коллекция {cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
+            new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
             new BreadcrumbItem("Уровень 1", $"/memorization-level-one/{CardCollectionId}")
         ];
     }
