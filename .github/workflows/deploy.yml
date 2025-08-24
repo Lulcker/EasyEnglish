@@ -57,5 +57,5 @@ jobs:
             AES_IV=${{ secrets.AES_IV }}
             EOL
             
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker-compose pull
+            docker-compose up -d --remove-orphans
