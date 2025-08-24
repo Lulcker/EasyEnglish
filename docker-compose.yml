@@ -19,9 +19,7 @@ services:
           memory: 256m
 
   api:
-    build:
-      context: .
-      dockerfile: EasyEnglish/Dockerfile
+    image: ${DOCKER_USERNAME}/easy-english-api
     container_name: easy_english_api
     environment:
       ConnectionStrings__Postgres: "${DB_CONNECTION_STRING}"
@@ -45,11 +43,7 @@ services:
           memory: 256m
   
   client:
-    build:
-      context: .
-      dockerfile: EasyEnglish.UI/Dockerfile
-      args:
-        API_BASE_URL: ${API_BASE_URL}
+    image: ${DOCKER_USERNAME}/easy-english-ui
     container_name: easy_english_ui
     depends_on:
       - api
