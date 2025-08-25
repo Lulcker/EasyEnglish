@@ -1,6 +1,7 @@
 ﻿using EasyEnglish.DTO.CardCollections.ResponseModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
+using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -11,7 +12,8 @@ namespace EasyEnglish.UI.Pages.Cards;
 /// </summary>
 public partial class MemorizationLevelOnePage(
     CardApiHelper cardApiHelper,
-    CardCollectionApiHelper cardCollectionApiHelper
+    CardCollectionApiHelper cardCollectionApiHelper,
+    IBreadcrumbHelper breadcrumbHelper
     ) : ComponentBase
 {
     #region Properties
@@ -39,12 +41,6 @@ public partial class MemorizationLevelOnePage(
 #pragma warning restore CS0414 // Field is assigned but its value is never used
 
     #endregion
-    
-    #region Breadcrumbs
-
-    private List<BreadcrumbItem> breadcrumbItems = [];
-
-    #endregion
 
     #region Methods
 
@@ -52,12 +48,12 @@ public partial class MemorizationLevelOnePage(
     {
         await LoadDataAsync();
         
-        breadcrumbItems =
+        breadcrumbHelper.SetBreadcrumbs(
         [
             new BreadcrumbItem("Коллекции", "/card-collections"),
             new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
             new BreadcrumbItem("Уровень 1", $"/memorization-level-one/{CardCollectionId}")
-        ];
+        ]);
     }
 
     private async Task LoadDataAsync()

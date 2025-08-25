@@ -15,6 +15,8 @@ internal static class HelpersConfigurator
         builder.Services.AddScoped<IHttpHelper, HttpHelper>();
 
         builder.Services.AddSingleton<ISnackbarHelper, SnackbarHelper>();
+        
+        builder.Services.AddSingleton<IBreadcrumbHelper, BreadcrumbHelper>();
 
         builder.Services.AddApiHelpers();
 

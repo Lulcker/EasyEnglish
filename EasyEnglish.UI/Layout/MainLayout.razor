@@ -6,12 +6,17 @@
             <div class="main-center">
                 <div class="main-header">
                     <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
-                        <MudSpacer />
-                        <MudText>
-                            @userSession.FirstName
-                        </MudText>
-                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense Class="mr-5">
-                            <MudMenuItem Label="Выйти" OnClick="LogOutAsync"/>
+                        <MudBreadcrumbs Items="breadcrumbHelper.Breadcrumbs"/>
+                        <MudSpacer/>
+                        <MudHidden Breakpoint="Breakpoint.Xs">
+                            <MudText>
+                                @userSession.FirstName
+                            </MudText>
+                        </MudHidden>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense 
+                                 Color="Color.Primary" Class="mr-2">
+                            <MudMenuItem Label="Выйти" OnClick="LogOutAsync"
+                                         Icon="@Icons.Material.Filled.Logout" IconColor="Color.Error" />
                         </MudMenu>
                     </MudStack>
                 </div>

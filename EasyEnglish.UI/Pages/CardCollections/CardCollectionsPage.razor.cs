@@ -13,6 +13,7 @@ namespace EasyEnglish.UI.Pages.CardCollections;
 /// </summary>
 public partial class CardCollectionsPage(
     CardCollectionApiHelper cardCollectionApiHelper,
+    IBreadcrumbHelper breadcrumbHelper,
     ISnackbarHelper snackbarHelper
     ) : ComponentBase
 {
@@ -38,8 +39,15 @@ public partial class CardCollectionsPage(
     
     #region Methods
 
-    protected override async Task OnInitializedAsync() =>
+    protected override async Task OnInitializedAsync()
+    {
+        breadcrumbHelper.SetBreadcrumbs(
+        [
+            new BreadcrumbItem("Коллекции", "/card-collections")
+        ]);
+        
         await LoadDataAsync();
+    }
 
     private async Task LoadDataAsync()
     {

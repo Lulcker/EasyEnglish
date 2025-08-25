@@ -16,6 +16,7 @@ public partial class CardCollectionPage(
     CardApiHelper cardApiHelper,
     CardCollectionApiHelper cardCollectionApiHelper,
     NavigationManager navigationManager,
+    IBreadcrumbHelper breadcrumbHelper,
     ISnackbarHelper snackbarHelper
     ) : ComponentBase
 {
@@ -47,12 +48,6 @@ public partial class CardCollectionPage(
 
     #endregion
     
-    #region Breadcrumbs
-
-    private List<BreadcrumbItem> breadcrumbItems = [];
-
-    #endregion
-    
     #region Properties
 
     private bool IsSaveButtonDisabled => newRuWord.IsEmpty() || newEnWord.IsEmpty() || isUpdateLoading;
@@ -67,11 +62,11 @@ public partial class CardCollectionPage(
         
         await LoadCardCollectionAsync();
         
-        breadcrumbItems =
+        breadcrumbHelper.SetBreadcrumbs(
         [
             new BreadcrumbItem("Коллекции", "/card-collections"),
             new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}")
-        ];
+        ]);
 
         await LoadCardsAsync();
     }

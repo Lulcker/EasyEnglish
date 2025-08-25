@@ -1,6 +1,7 @@
 ﻿using EasyEnglish.DTO.CardCollections.ResponseModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
+using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -11,7 +12,8 @@ namespace EasyEnglish.UI.Pages.Cards;
 /// </summary>
 public partial class MemorizationLevelTwoPage(
     CardApiHelper cardApiHelper,
-    CardCollectionApiHelper cardCollectionApiHelper
+    CardCollectionApiHelper cardCollectionApiHelper,
+    IBreadcrumbHelper breadcrumbHelper
     ) : ComponentBase
 {
     #region Properties
@@ -42,24 +44,18 @@ public partial class MemorizationLevelTwoPage(
 
     #endregion
 
-    #region Breadcrumbs
-
-    private List<BreadcrumbItem> breadcrumbItems = [];
-
-    #endregion
-
     #region Methods
 
     protected override async Task OnInitializedAsync()
     {
         await LoadDataAsync();
 
-        breadcrumbItems =
+        breadcrumbHelper.SetBreadcrumbs(
         [
             new BreadcrumbItem("Коллекции", "/card-collections"),
             new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
             new BreadcrumbItem("Уровень 2", $"/memorization-level-two/{CardCollectionId}")
-        ];
+        ]);
 
         currentCard = cards.FirstOrDefault();
     }
