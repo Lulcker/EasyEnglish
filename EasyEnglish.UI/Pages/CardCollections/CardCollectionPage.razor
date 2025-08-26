@@ -3,7 +3,7 @@
 <PageTitle>EasyEnglish | @cardCollection?.Title</PageTitle>
 
 <MudText Typo="Typo.h4" Class="mb-4">
-    @cardCollection?.Title
+    @cardCollection?.Title @(cards.Count > 0 ? $"[{cards.Count}]" : string.Empty)
 </MudText>
 
 @if (cards.Count == 0 && !isDataLoading)

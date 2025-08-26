@@ -1,5 +1,5 @@
 ﻿<MudPaper Elevation="3" Class="pa-4 mb-3 position-relative"
-          @onclick="OpenCardCollectionPage">
+          @onclick="@(isEditMode ? null! : OpenCardCollectionPage)">
     @if (isEditMode)
     {
         <MudTextField Label="Название коллекции"
