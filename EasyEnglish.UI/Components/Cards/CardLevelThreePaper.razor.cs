@@ -39,6 +39,12 @@ public partial class CardLevelThreePaper : ComponentBase
     /// </summary>
     [Parameter, EditorRequired]
     public required EventCallback<bool?> IsCorrectAnswerChanged { get; set; }
+    
+    /// <summary>
+    /// Событие при неправильном ответе
+    /// </summary>
+    [Parameter, EditorRequired]
+    public EventCallback OnWrongAnswer { get; set; }
 
     #endregion
 
@@ -49,8 +55,12 @@ public partial class CardLevelThreePaper : ComponentBase
 
     private async Task CheckAnswer()
     {
-        await IsCorrectAnswerChanged
-            .InvokeAsync(string.Equals(Answer.Trim(), Card.EnWord, StringComparison.CurrentCultureIgnoreCase));
+        var resultEquals = string.Equals(Answer.Trim(), Card.EnWord, StringComparison.CurrentCultureIgnoreCase);
+        
+        await IsCorrectAnswerChanged.InvokeAsync(resultEquals);
+        
+        if (!resultEquals)
+            await OnWrongAnswer.InvokeAsync();
     }
     
     private string GetTextFieldClass()

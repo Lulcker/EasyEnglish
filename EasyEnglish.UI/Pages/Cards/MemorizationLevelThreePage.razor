@@ -13,7 +13,8 @@
 
     <CardLevelThreePaper Card="currentCard"
                          @bind-Answer="answer"
-                         @bind-IsCorrectAnswer="correctAnswer"/>
+                         @bind-IsCorrectAnswer="correctAnswer"
+                         OnWrongAnswer="@(() => AddWrongCard(cards[currentCardIndex]))" />
 
     <MudStack Row AlignItems="AlignItems.Center" Class="mt-3">
         <MudIconButton OnClick="PreviousCard"
@@ -22,6 +23,26 @@
         <MudSpacer/>
         <MudIconButton OnClick="NextCard"
                        Disabled="@(currentCardIndex >= cards.Count - 1)"
-                       Icon="@Icons.Material.Filled.ArrowForwardIos"/>
+                       Icon="@Icons.Material.Filled.ArrowForwardIos" />
     </MudStack>
+    
+    if (wrongAnswerCards.Count > 0)
+    {
+        <MudStack Row AlignItems="AlignItems.Center"
+                  Class="mt-5 mb-2" Spacing="2">
+            <MudText Typo="Typo.h6">
+                Неправильные ответы
+            </MudText>
+            <MudIconButton Icon="@(isShowWrongCards ? Icons.Material.Outlined.ArrowDropUp : Icons.Material.Outlined.ArrowDropDown)"
+                           OnClick="ToggleShowWrongCards" />
+        </MudStack>
+
+        if (isShowWrongCards)
+        {
+            foreach (var wrongAnswerCard in wrongAnswerCards)
+            {
+                <CardPaper Card="wrongAnswerCard" ReadOnly />
+            }
+        }
+    }
 }

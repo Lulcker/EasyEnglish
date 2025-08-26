@@ -20,25 +20,25 @@ public partial class CardLevelOnePaper : ComponentBase
     /// <summary>
     /// Другие варианты ответов
     /// </summary>
-    [Parameter]
+    [Parameter, EditorRequired]
     public List<string> OtherAnswerVariants { get; set; } = [];
 
     /// <summary>
     /// Текущий индекс карточки
     /// </summary>
-    [Parameter] 
+    [Parameter, EditorRequired] 
     public int Index { get; set; }
     
     /// <summary>
     /// Количество карточек
     /// </summary>
-    [Parameter]
+    [Parameter, EditorRequired]
     public int CardsCount { get; set; }
     
     /// <summary>
     /// Событие при неправильном ответе
     /// </summary>
-    [Parameter]
+    [Parameter, EditorRequired]
     public EventCallback OnWrongAnswer { get; set; }
 
     #endregion

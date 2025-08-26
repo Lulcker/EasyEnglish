@@ -15,7 +15,7 @@
                            Index="@(currentIndex + 1)"
                            CardsCount="cardCollection.CardsCount"
                            OtherAnswerVariants="@(GetOtherAnswerVariants(cards[currentIndex].Id))"
-                           OnWrongAnswer="@(() => AddWrongCard(cards[currentIndex]))"/>
+                           OnWrongAnswer="@(() => AddWrongCard(cards[currentIndex]))" />
     }
 
     if (wrongAnswerCards.Count > 0)
@@ -26,14 +26,14 @@
                 Неправильные ответы
             </MudText>
             <MudIconButton Icon="@(isShowWrongCards ? Icons.Material.Outlined.ArrowDropUp : Icons.Material.Outlined.ArrowDropDown)"
-                           OnClick="ToggleShowWrongCards"/>
+                           OnClick="ToggleShowWrongCards" />
         </MudStack>
 
         if (isShowWrongCards)
         {
             foreach (var wrongAnswerCard in wrongAnswerCards)
             {
-                <CardPaper Card="wrongAnswerCard" ReadOnly/>
+                <CardPaper Card="wrongAnswerCard" ReadOnly />
             }
         }
     }

@@ -32,7 +32,7 @@ public partial class MemorizationLevelOnePage(
 
     private List<CardResponseModel> cards = [];
 
-    private List<CardResponseModel> wrongAnswerCards = [];
+    private readonly HashSet<CardResponseModel> wrongAnswerCards = [];
     
     private bool isShowWrongCards;
 

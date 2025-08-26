@@ -39,6 +39,10 @@ public partial class MemorizationLevelThreePage(
     private string answer = string.Empty;
 
     private bool? correctAnswer;
+    
+    private readonly HashSet<CardResponseModel> wrongAnswerCards = [];
+    
+    private bool isShowWrongCards;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
     private bool isLoading;
@@ -92,6 +96,12 @@ public partial class MemorizationLevelThreePage(
         
         currentCard = cards[++currentCardIndex];
     }
+    
+    private void AddWrongCard(CardResponseModel card)
+        => wrongAnswerCards.Add(card);
+
+    private void ToggleShowWrongCards() =>
+        isShowWrongCards = !isShowWrongCards;
 
     #endregion
 }
