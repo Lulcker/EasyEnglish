@@ -48,14 +48,9 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
                                                      }
                                                      """;
 
-    private const string MethodTemplate = """
-                                          public async Task[ReturnType] [MethodName]([Parameters])
-                                          {
-                                              [CallHttpHelper]
-                                          }
-                                          """;
+    private const string MethodTemplate = "public async Task[ReturnType] [MethodName]([Parameters]) =>\n\t\t[CallHttpHelper]";
 
-    private const string CallHttpHelper = "[Return]await httpHelper.SendAsync[TRequest|TResponse]([Path], [HttpMethod][RequestModel]);";
+    private const string CallHttpHelper = "await httpHelper.SendAsync[TRequest|TResponse]([Path], [HttpMethod][RequestModel]);";
 
     private const string DependencyService = "services.AddScoped<[ServiceName]>();";
     
@@ -156,7 +151,6 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
                     .Any(a => a.AttributeClass!.Name == "FromBodyAttribute"));
 
             var callHttpHelper = CallHttpHelper
-                .Replace("[Return]", returnType == string.Empty ? string.Empty : "return ")
                 .Replace("[TRequest|TResponse]", GetRequestResponseGenericType(requestModel, returnType))
                 .Replace("[HttpMethod]", GetHttpMethod(method))
                 .Replace("[RequestModel]", requestModel is null ? string.Empty : $", {requestModel.Name}")
@@ -165,7 +159,7 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
             methods.Add(MethodTemplate
                 .Replace("[ReturnType]", returnType == string.Empty ? string.Empty :  $"<{returnType}>")
                 .Replace("[MethodName]", method.Name)
-                .Replace("[Parameters]", string.Join(", ", parameters.Select(p => $"{p.Type.Name} {p.Name}")))
+                .Replace("[Parameters]", string.Join(", ", parameters.Select(p => $"{p.Type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)} {p.Name}")))
                 .Replace("[CallHttpHelper]", callHttpHelper)
             );
         }
@@ -195,10 +189,10 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
     private static string GetRequestResponseGenericType(IParameterSymbol? requestModel, string returnType)
     {
         if (requestModel is not null && returnType != string.Empty)
-            return $"<{requestModel.Type.Name}, {returnType}>";
+            return $"<{requestModel.Type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}, {returnType}>";
         
         if (requestModel is not null && returnType == string.Empty)
-            return $"<{requestModel.Type.Name}>";
+            return $"<{requestModel.Type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}>";
         
         if (requestModel is null && returnType != string.Empty)
             return $"<{returnType}>";
@@ -208,14 +202,13 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
 
     private static string GetReturnType(IMethodSymbol method)
     {
-        var returnType = method.ReturnType.ToDisplayString();
+        var returnType = method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
             
-        if (returnType == "System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult>")
+        if (returnType == "Task<IActionResult>")
             return string.Empty;
 
         returnType = returnType
-            .Replace("System.Threading.Tasks.Task<", string.Empty)
-            .Replace("Microsoft.AspNetCore.Mvc.ActionResult<", string.Empty);
+            .Replace("Task<ActionResult<", string.Empty);
 
         return returnType.Substring(0, returnType.Length - 2);
     }
