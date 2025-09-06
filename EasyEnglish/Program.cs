@@ -1,6 +1,7 @@
 using EasyEnglish.Configurators;
 using EasyEnglish.Handlers;
 using EasyEnglish.Middlewares;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ builder
     .ConfigureLogging()
     .ConfigureAutofac()
     .ConfigureDatabase()
-    .ConfigureAesCrypto();
+    .ConfigureHangfire()
+    .ConfigureAesCrypto()
+    .ConfigureEmailService();
 
 builder.Services.AddControllers();
 
@@ -27,6 +30,8 @@ app.UseAuthorization();
 app.UseUserInfo();
 
 app.MapControllers();
+
+app.MapHangfireDashboard();
 
 app.MigrateDatabase();
 

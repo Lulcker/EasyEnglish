@@ -13,10 +13,12 @@
                                 @userSession.FirstName
                             </MudText>
                         </MudHidden>
-                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense 
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense
                                  Color="Color.Primary" Class="mr-2">
+                            <MudMenuItem Label="Профиль" OnClick="OpenProfile"
+                                         Icon="@Icons.Material.Filled.Portrait" IconColor="Color.Primary" />
                             <MudMenuItem Label="Выйти" OnClick="LogOutAsync"
-                                         Icon="@Icons.Material.Filled.Logout" IconColor="Color.Error" />
+                                         Icon="@Icons.Material.Filled.Logout" IconColor="Color.Error"/>
                         </MudMenu>
                     </MudStack>
                 </div>

@@ -1,0 +1,106 @@
+﻿@page "/profile"
+
+<PageTitle>EasyEnglish | Профиль</PageTitle>
+
+<MudStack Spacing="0" Class="mb-5">
+    <MudText Typo="Typo.caption">
+        Имя
+    </MudText>
+    <MudText>
+        @userSession.FirstName
+    </MudText>
+</MudStack>
+
+<MudStack Spacing="0" Class="mb-5">
+    <MudText Typo="Typo.caption">
+        Почта
+    </MudText>
+    <MudText>
+        @userSession.Email
+    </MudText>
+</MudStack>
+
+<MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+    <MudText Typo="Typo.caption">
+        Напоминания
+    </MudText>
+    @if (!isEditReminderSettings)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                       OnClick="OpenEditReminderSettings" />
+    }
+</MudStack>
+
+@if (isEditReminderSettings)
+{
+    @*<MudRadioGroup T="ReminderMode" @bind-Value="mode" Class="mb-3">
+        <MudRadio Value="ReminderMode.Fix" Label="Фиксировано" Size="Size.Small" />
+        <MudRadio Value="ReminderMode.Periodicity" Label="Переодически" Size="Size.Small" />
+    </MudRadioGroup>*@
+
+    switch (mode)
+    {
+        case ReminderMode.Fix:
+            @*TODO: FixMode*@
+            break;
+        case ReminderMode.Periodicity:
+            <MudTimePicker Label="Время начала работы напоминаний" Clearable Class="mb-3"
+                           Time="startWorkTime" TimeChanged="StartWorkTimeChanged" />
+
+            <MudTimePicker Label="Время окончания работы напоминаний" Clearable Class="mb-3"
+                           Time="endWorkTime" TimeChanged="EndWorkTimeChanged" />
+            
+            <MudSlider T="int" @bind-Value="periodicityTime"
+                       Immediate Variant="Variant.Filled" TickMarks
+                       Min="2" Max="@(GetMaxPeriodicityTime())" Class="mb-3"
+                       Disabled="@(!startWorkTime.HasValue || !endWorkTime.HasValue)">
+                Переодичность: каждые @periodicityTime ч.
+            </MudSlider>
+            break;
+        default:
+            throw new ArgumentOutOfRangeException();
+    }
+    
+    <MudStack Row AlignItems="AlignItems.Center">
+        <MudButton OnClick="CloseEditReminderSettings" 
+                   Variant="Variant.Outlined" Color="Color.Primary">
+            Отменить
+        </MudButton> 
+        <MudButton OnClick="SetOrUpdateReminderSettings" 
+                   Variant="Variant.Filled" Color="Color.Primary"
+                   Disabled="@(reminderSettings is null ? IsSetReminderSettingsButtonDisabled : IsUpdateReminderSettingsButtonDisabled)">
+             @(reminderSettings is null ? "Создать" : "Обновить")
+        </MudButton>
+    </MudStack>
+}
+else
+{
+    if (reminderSettings is not null)
+    {
+        <MudSwitch T="bool" Value="isEnabledReminderSettings" Class="flex-row"
+                   ValueChanged="@(v => ChangeIsEnabledReminderSettings(v))" 
+                   ReadOnly="isDataLoading" LabelPlacement="Placement.Start" Color="Color.Success"
+                   Label="@(isEnabledReminderSettings ? "Напоминания включены" : "Напоминания выключены")" />
+        
+        if (isEnabledReminderSettings)
+        {
+            switch (mode)
+            {
+                case ReminderMode.Fix:
+                    @*TODO: FixMode*@
+                    break;
+                case ReminderMode.Periodicity:
+                    <MudText>
+                        Напоминания будут приходить каждый день с @startWorkTime!.Value.ToString(@"hh\:mm") до @endWorkTime!.Value.ToString(@"hh\:mm") каждые @periodicityTime ч.
+                    </MudText>
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+    else
+    {
+        <MudText>Напоминания ещё не настроены</MudText>
+    }
+}

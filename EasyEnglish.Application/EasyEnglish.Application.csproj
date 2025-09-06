@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EasyEnglish.DTO\EasyEnglish.DTO.csproj" />
       <ProjectReference Include="..\EasyEnglish.Persistence\EasyEnglish.Persistence.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Hangfire" Version="1.8.21" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     </ItemGroup>
 

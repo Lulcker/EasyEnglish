@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyEnglish.Configurators;
+
 internal static class DatabaseConfigurator
 {
     internal static WebApplicationBuilder ConfigureDatabase(this WebApplicationBuilder builder)

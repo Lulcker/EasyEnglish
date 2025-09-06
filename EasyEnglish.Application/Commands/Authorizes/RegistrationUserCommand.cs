@@ -1,4 +1,5 @@
-﻿using EasyEnglish.Application.Contracts.Services;
+﻿using System.Net.Mail;
+using EasyEnglish.Application.Contracts.Services;
 using EasyEnglish.Application.Rules.Authorizes;
 using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.Authorizes.RequestModels;
@@ -28,6 +29,10 @@ public class RegistrationUserCommand(
         
         firstName.ThrowIfEmpty("Имя не может быть пустым");
         email.ThrowIfEmpty("Почта не может быть пустой");
+        
+        email.IsValidEmail()
+            .ThrowIfInvalidCondition("Неверный адрес электронный почты");
+        
         requestModel.Password.ThrowIfEmpty("Пароль не может быть пустым");
         
         (requestModel.Password.Length >= 8)

@@ -15,5 +15,10 @@ internal sealed class UserConfig : EntityTypeConfigurationBase<User>
             .WithOne(c => c.User)
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(u => u.ReminderSettings)
+            .WithOne(r => r.User)
+            .HasForeignKey<UserReminderSettings>(r => r.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

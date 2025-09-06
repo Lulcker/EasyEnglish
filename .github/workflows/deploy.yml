@@ -55,6 +55,10 @@ jobs:
             HASH_PEPPER=${{ secrets.HASH_PEPPER }}
             AES_KEY=${{ secrets.AES_KEY }}
             AES_IV=${{ secrets.AES_IV }}
+            EMAIL_HOST=${{ secrets.EMAIL_HOST }}
+            EMAIL_PORT=${{ secrets.EMAIL_PORT }}
+            EMAIL_TO=${{ secrets.EMAIL_TO }}
+            EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
             EOL
             
             docker-compose pull

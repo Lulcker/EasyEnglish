@@ -11,11 +11,13 @@ internal static class AuthConfigurator
     internal static WebApplicationBuilder ConfigureAuth(this WebApplicationBuilder builder)
     {
         var key = builder.Configuration.GetValue<string>("Auth:Key") 
-                  ?? throw new ArgumentNullException("Auth:Key");
+                  ?? throw new ArgumentNullException(nameof(builder));
+        
         var issuer = builder.Configuration.GetValue<string>("Auth:Issuer") 
-                     ?? throw new ArgumentNullException("Auth:Issuer");
+                     ?? throw new ArgumentNullException(nameof(builder));
+        
         var audience = builder.Configuration.GetValue<string>("Auth:Audience") 
-                       ?? throw new ArgumentNullException("Auth:Audience");
+                       ?? throw new ArgumentNullException(nameof(builder));
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

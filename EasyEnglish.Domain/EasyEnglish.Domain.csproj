@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\EasyEnglish.Core\EasyEnglish.Core.csproj" />
+      <ProjectReference Include="..\EasyEnglish.DTO\EasyEnglish.DTO.csproj" />
     </ItemGroup>
 
 </Project>

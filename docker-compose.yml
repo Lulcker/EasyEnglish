@@ -13,6 +13,8 @@ services:
     restart: always
     networks:
       - dev
+    ports:
+      - "5432:5432"
     deploy:
       resources:
         limits:
@@ -30,6 +32,10 @@ services:
       Hash__Pepper: ${HASH_PEPPER}
       Aes__Key: ${AES_KEY}
       Aes__IV: ${AES_IV}
+      Email__Host: ${EMAIL_HOST}
+      Email__Port: ${EMAIL_PORT}
+      Email__EmailTo: ${EMAIL_TO}
+      Email__Password: ${EMAIL_PASSWORD}
     depends_on:
       - db
     ports:

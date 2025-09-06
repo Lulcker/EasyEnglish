@@ -3,6 +3,7 @@ using System;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyEnglish.Persistence.Migrations
 {
     [DbContext(typeof(EasyEnglishDbContext))]
-    partial class EasyEnglishDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250905053158_Add_Table_UserReminderSettings")]
+    partial class Add_Table_UserReminderSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

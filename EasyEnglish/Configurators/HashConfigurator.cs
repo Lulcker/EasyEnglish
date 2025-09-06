@@ -11,7 +11,7 @@ internal static class HashConfigurator
     internal static WebApplicationBuilder ConfigureHash(this WebApplicationBuilder builder)
     {
         var pepper = builder.Configuration.GetValue<string>("Hash:Pepper") ??
-                     throw new ArgumentNullException("Hash:Pepper");
+                     throw new ArgumentNullException(nameof(builder));
         
         builder.Services.AddSingleton<IHashProvider>(_ => new HashProvider
         {

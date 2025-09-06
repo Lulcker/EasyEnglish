@@ -31,4 +31,9 @@ public class User : EntityBase
     /// Коллекции карточек
     /// </summary>
     public ICollection<CardCollection> CardCollections { get; set; } = new HashSet<CardCollection>();
+
+    /// <summary>
+    /// Настройки напоминаний
+    /// </summary>
+    public UserReminderSettings? ReminderSettings { get; set; }
 }

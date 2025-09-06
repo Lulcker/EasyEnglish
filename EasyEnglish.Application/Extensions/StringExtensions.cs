@@ -1,9 +1,11 @@
-﻿namespace EasyEnglish.Application.Extensions;
+﻿using System.Text.RegularExpressions;
+
+namespace EasyEnglish.Application.Extensions;
 
 /// <summary>
 /// Расширения для String
 /// </summary>
-internal static class StringExtensions
+internal static partial class StringExtensions
 {
     /// <summary>
     /// Является ли строка пустой
@@ -25,4 +27,15 @@ internal static class StringExtensions
     /// <param name="str">Строка</param>
     internal static string UppercaseFirstLetter(this string str) =>
         string.Concat(str[0].ToString().ToUpperInvariant() + str[1..]);
+
+    internal static bool IsValidEmail(this string str)
+    {
+        if (string.IsNullOrWhiteSpace(str))
+            return false;
+        
+        return EmailRegex().IsMatch(str);
+    }
+
+    [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase, "ru-RU")]
+    private static partial Regex EmailRegex();
 }
