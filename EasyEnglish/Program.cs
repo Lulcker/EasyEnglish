@@ -22,6 +22,8 @@ var app = builder.Build();
 
 app.UseCors("CorsPolicy");
 
+app.MapHangfireDashboard();
+
 app.UseExceptionHandler(error => error.Run(GlobalExceptionHandler.Handle));
 
 app.UseAuthentication();
@@ -30,8 +32,6 @@ app.UseAuthorization();
 app.UseUserInfo();
 
 app.MapControllers();
-
-app.MapHangfireDashboard();
 
 app.MigrateDatabase();
 
