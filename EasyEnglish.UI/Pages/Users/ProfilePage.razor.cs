@@ -17,7 +17,7 @@ public partial class ProfilePage(
 {
     #region Consts
 
-    private const int MinPeriodicityTime = 1;
+    private const int MinPeriodicityTime = 2;
 
     #endregion
     
