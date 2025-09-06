@@ -69,6 +69,8 @@ public class UpdateReminderSettingsCommand(
         
         var delay = RecurrenceHelper.GetNextReminderDelay(reminderSettings);
 
+        backgroundJobClient.Delete(reminderSettings.BackgroundJobId);
+
         var backgroundJobId = backgroundJobClient
             .Schedule<SendReminderToUserRule>(x => x.ExecuteAsync(userInfoProvider.Id), delay);
 
