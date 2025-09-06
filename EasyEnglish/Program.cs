@@ -1,4 +1,5 @@
 using EasyEnglish.Configurators;
+using EasyEnglish.Filters;
 using EasyEnglish.Handlers;
 using EasyEnglish.Middlewares;
 using Hangfire;
@@ -20,9 +21,12 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseCors("CorsPolicy");
+app.MapHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = [new AllowAllDashboardAuthorizationFilter()]
+});
 
-app.MapHangfireDashboard();
+app.UseCors("CorsPolicy");
 
 app.UseExceptionHandler(error => error.Run(GlobalExceptionHandler.Handle));
 
