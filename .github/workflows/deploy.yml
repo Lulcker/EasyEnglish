@@ -59,6 +59,10 @@ jobs:
             EMAIL_PORT=${{ secrets.EMAIL_PORT }}
             EMAIL_TO=${{ secrets.EMAIL_TO }}
             EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+            SEQ_FIRSTRUN_ADMINUSERNAME=${{ secrets.SEQ_FIRSTRUN_ADMINUSERNAME }}
+            SEQ_FIRSTRUN_ADMINPASSWORD=${{ secrets.SEQ_FIRSTRUN_ADMINPASSWORD }}
+            SEQ_SERVER_URL=${{ secrets.SEQ_SERVER_URL }}
+            SEQ_API_KEY=${{ secrets.SEQ_API_KEY }}
             EOL
             
             docker-compose pull

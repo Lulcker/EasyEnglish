@@ -40,7 +40,7 @@ public class UpdateCardCommand(
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord}  пользователем с Email: {UserEmail}",
-            oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email);
+        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord}  пользователем с Email: {UserEmail} (Id: {UserId})",
+            oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

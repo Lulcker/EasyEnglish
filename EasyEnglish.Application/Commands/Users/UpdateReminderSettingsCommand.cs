@@ -67,18 +67,21 @@ public class UpdateReminderSettingsCommand(
             ? requestModel.PeriodicityTime
             : null;
         
-        var delay = RecurrenceHelper.GetNextReminderDelay(reminderSettings);
+        if (reminderSettings.IsEnabled)
+        {
+            var delay = RecurrenceHelper.GetNextReminderDelay(reminderSettings);
 
-        backgroundJobClient.Delete(reminderSettings.BackgroundJobId);
+            backgroundJobClient.Delete(reminderSettings.BackgroundJobId);
 
-        var backgroundJobId = backgroundJobClient
-            .Schedule<SendReminderToUserRule>(x => x.ExecuteAsync(userInfoProvider.Id), delay);
+            var backgroundJobId = backgroundJobClient
+                .Schedule<SendReminderToUserRule>(x => x.ExecuteAsync(userInfoProvider.Id), delay);
 
-        reminderSettings.BackgroundJobId = backgroundJobId;
+            reminderSettings.BackgroundJobId = backgroundJobId;
+        }
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлены настройки напоминаний для пользователя c Email: {UserEmail} " +
-                              "Следующее напоминание через {Delay}", userInfoProvider.Email, delay);
+        logger.LogInformation("Обновлены настройки напоминаний для пользователя c Email: {UserEmail} (Id: {UserId})",
+            userInfoProvider.Email, userInfoProvider.Id);
     }
 }

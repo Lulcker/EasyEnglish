@@ -39,7 +39,7 @@ public class UpdateCardCollectionCommand(
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлена коллекция Id: {CardCollectionId} пользователем с Email: {UserEmail}, Название {OldCardCollectionTitle} -> {NewCardCollectionTitle}",
-            cardCollection.Id, userInfoProvider.Email, oldCardCollectionTitle, cardCollection.Title);
+        logger.LogInformation("Обновлена коллекция Id: {CardCollectionId} пользователем с Email: {UserEmail} (Id: {UserId}), Название {OldCardCollectionTitle} -> {NewCardCollectionTitle}",
+            cardCollection.Id, userInfoProvider.Email, userInfoProvider.Id, oldCardCollectionTitle, cardCollection.Title);
     }
 }

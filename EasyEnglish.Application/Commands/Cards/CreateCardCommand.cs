@@ -50,7 +50,7 @@ public class CreateCardCommand(
         cardRepository.Add(card);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}  пользователем с Email: {UserEmail}",
-            card.RuWord, card.EnWord, cardCollection.Title, userInfoProvider.Email);
+        logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}  пользователем с Email: {UserEmail} (Id: {UserId})",
+            card.RuWord, card.EnWord, cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

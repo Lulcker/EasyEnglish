@@ -55,8 +55,10 @@ public class ChangeEnabledReminderSettingsCommand(
         await unitOfWork.SaveChangesAsync();
 
         if (requestModel.IsEnabled)
-            logger.LogInformation("Включены напоминания для пользователя c Email: {UserEmail}", userInfoProvider.Email);
+            logger.LogInformation("Включены напоминания для пользователя c Email: {UserEmail} (Id: {UserId})",
+                userInfoProvider.Email, userInfoProvider.Id);
         else
-            logger.LogInformation("Выключены напоминания для пользователя c Email: {UserEmail}", userInfoProvider.Email);
+            logger.LogInformation("Выключены напоминания для пользователя c Email: {UserEmail} (Id: {UserId})",
+                userInfoProvider.Email, userInfoProvider.Id);
     }
 }

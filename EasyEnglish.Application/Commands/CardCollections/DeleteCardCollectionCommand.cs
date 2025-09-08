@@ -34,7 +34,7 @@ public class DeleteCardCollectionCommand(
         cardCollectionRepository.Remove(cardCollection);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Удалена коллекция {CardCollectionTitle} пользователем с Email: {UserEmail}",
-            cardCollection.Title, userInfoProvider.Email);
+        logger.LogInformation("Удалена коллекция {CardCollectionTitle} пользователем с Email: {UserEmail} (Id: {UserId})",
+            cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

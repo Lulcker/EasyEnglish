@@ -43,8 +43,8 @@ public class LoginUserCommand(
         
         user.ThrowIfNull("Неверный пароль");
         
-        logger.LogInformation("Пользователь {UserFirstName} Email: {UserEmail} вошёл в систему",
-            aesCryptoService.Decrypt(user.FirstName), aesCryptoService.Decrypt(user.Email));
+        logger.LogInformation("Пользователь {UserFirstName} Email: {UserEmail} (Id: {UserId}) вошёл в систему",
+            aesCryptoService.Decrypt(user.FirstName), aesCryptoService.Decrypt(user.Email), user.Id);
 
         return new AuthorizeUserResponseModel
         {

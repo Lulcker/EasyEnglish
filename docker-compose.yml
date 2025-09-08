@@ -19,6 +19,27 @@ services:
       resources:
         limits:
           memory: 256m
+  
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_ADMINUSERNAME: ${SEQ_FIRSTRUN_ADMINUSERNAME}
+      SEQ_FIRSTRUN_ADMINPASSWORD: ${SEQ_FIRSTRUN_ADMINPASSWORD}
+      SEQ_STORAGE__MAXIMUMSIZEGB: 1
+    volumes:
+      - seqdata:/data
+    restart: always
+    networks:
+      - dev
+    ports:
+      - "5341:5341"
+      - "5342:80"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
   api:
     image: ${DOCKER_USERNAME}/easy-english-api
@@ -36,6 +57,8 @@ services:
       Email__Port: ${EMAIL_PORT}
       Email__EmailTo: ${EMAIL_TO}
       Email__Password: ${EMAIL_PASSWORD}
+      Seq__ServerUrl: ${SEQ_SERVER_URL}
+      Seq__ApiKey: ${SEQ_API_KEY}
     depends_on:
       - db
     ports:
@@ -65,6 +88,7 @@ services:
 
 volumes:
   pgdata:
+  seqdata:
   
 networks:
   dev:

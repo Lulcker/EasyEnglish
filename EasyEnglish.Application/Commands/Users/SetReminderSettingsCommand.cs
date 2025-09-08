@@ -83,7 +83,7 @@ public class SetReminderSettingsCommand(
         reminderSettingsRepository.Add(reminderSettings);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Установлены настройки напоминаний для пользователя c Email: {UserEmail} " +
-                              "Следующее напоминание через {Delay}", userInfoProvider.Email, delay);
+        logger.LogInformation("Установлены настройки напоминаний для пользователя c Email: {UserEmail} (Id: {UserId}) " +
+                              "Следующее напоминание через {Delay}", userInfoProvider.Email, userInfoProvider.Id, delay);
     }
 }

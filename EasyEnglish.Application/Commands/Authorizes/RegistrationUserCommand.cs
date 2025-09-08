@@ -1,5 +1,4 @@
-﻿using System.Net.Mail;
-using EasyEnglish.Application.Contracts.Services;
+﻿using EasyEnglish.Application.Contracts.Services;
 using EasyEnglish.Application.Rules.Authorizes;
 using EasyEnglish.Domain.Entities;
 using EasyEnglish.DTO.Authorizes.RequestModels;
@@ -54,7 +53,8 @@ public class RegistrationUserCommand(
         userRepository.Add(newUser);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Зарегистрирован новый пользователь с Id: {UserId}, Email: {UserEmail}", newUser.Id, email);
+        logger.LogInformation("Зарегистрирован новый пользователь {UserFirstName}, Email: {UserEmail} (Id: {UserId})",
+            newUser.FirstName, email, newUser.Id);
 
         return new AuthorizeUserResponseModel
         {

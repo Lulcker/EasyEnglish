@@ -30,6 +30,7 @@ public class DeleteCardCommand(
         cardRepository.Remove(card);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Карточка с Id: {CardId} удалена пользователем с Email: {UserEmail}", cardId, userInfoProvider.Email);
+        logger.LogInformation("Карточка с Id: {CardId} удалена пользователем с Email: {UserEmail} (Id: {UserId})",
+            cardId, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

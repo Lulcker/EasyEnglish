@@ -37,8 +37,8 @@ public class CreateCardCollectionCommand(
         cardCollectionRepository.Add(cardCollection);
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Создана коллекция {CardCollectionTitle} пользователем с Email: {UserEmail}",
-            cardCollection.Title, userInfoProvider.Email);
+        logger.LogInformation("Создана коллекция {CardCollectionTitle} пользователем с Email: {UserEmail} (Id: {UserId})",
+            cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);
 
         return cardCollection.Id;
     }

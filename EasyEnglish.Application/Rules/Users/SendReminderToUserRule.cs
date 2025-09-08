@@ -119,7 +119,7 @@ public class SendReminderToUserRule(
         
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Отправлено напоминание пользователю с Email: {UserEmail} " +
-                              "Следующее напоминание через {Delay}", email, delay);
+        logger.LogInformation("Отправлено напоминание пользователю с Email: {UserEmail} (Id: {UserId})" +
+                              "Следующее напоминание через {Delay}", email, userId, delay);
     }
 }
