@@ -77,7 +77,7 @@ else
 {
     if (reminderSettings is not null)
     {
-        <MudSwitch T="bool" Value="isEnabledReminderSettings" Class="flex-row"
+        <MudSwitch T="bool" Value="isEnabledReminderSettings" Class="flex-row" 
                    ValueChanged="@(v => ChangeIsEnabledReminderSettings(v))" 
                    ReadOnly="isDataLoading" LabelPlacement="Placement.Start" Color="Color.Success"
                    Label="@(isEnabledReminderSettings ? "Напоминания включены" : "Напоминания выключены")" />

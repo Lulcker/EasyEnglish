@@ -152,6 +152,23 @@ public partial class ProfilePage(
     private async Task ChangeIsEnabledReminderSettings(bool value)
     {
         isEnabledReminderSettings = value;
+        
+        if (value)
+        {
+            if (!await snackbarHelper.ShowConfirm("Вы уверены, что хотите включить уведомления?"))
+            {
+                isEnabledReminderSettings = false;
+                return;
+            }
+        }
+        else
+        {
+            if (!await snackbarHelper.ShowConfirm("Вы уверены, что хотите выключить уведомления?"))
+            {
+                isEnabledReminderSettings = true;
+                return;
+            }
+        }
 
         isDataLoading = true;
 
