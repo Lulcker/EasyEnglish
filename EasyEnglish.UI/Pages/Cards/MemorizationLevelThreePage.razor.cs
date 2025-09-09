@@ -75,18 +75,10 @@ public partial class MemorizationLevelThreePage(
         cards =  
         [..
             (await cardApiHelper.AllByCollectionIdAsync(CardCollectionId))
-                .OrderBy(x => Guid.NewGuid())
+                .OrderBy(_ => Guid.NewGuid())
         ];
         
         isLoading = false;
-    }
-
-    private void PreviousCard()
-    {
-        answer = string.Empty;
-        correctAnswer = null;
-        
-        currentCard = cards[--currentCardIndex];
     }
 
     private void NextCard()

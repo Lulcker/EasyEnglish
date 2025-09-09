@@ -12,15 +12,19 @@
     </MudText>
 
     <CardLevelTwoPaper Card="currentCard"
-                       @bind-IsFlipped="isFlipped"/>
+                       @bind-IsFlipped="isFlipped" />
 
     <MudStack Row AlignItems="AlignItems.Center" Class="mt-3">
-        <MudIconButton OnClick="PreviousCard"
-                       Disabled="@(currentCardIndex == 0)"
-                       Icon="@Icons.Material.Filled.ArrowBackIos"/>
+        @if (currentCardIndex > 0)
+        {
+            <MudIconButton OnClick="PreviousCard"
+                           Icon="@Icons.Material.Filled.ArrowBackIos" />
+        }
         <MudSpacer/>
-        <MudIconButton OnClick="NextCard"
-                       Disabled="@(currentCardIndex >= cards.Count - 1)"
-                       Icon="@Icons.Material.Filled.ArrowForwardIos"/>
+        @if (currentCardIndex < cards.Count - 1)
+        {
+            <MudIconButton OnClick="NextCard"
+                           Icon="@Icons.Material.Filled.ArrowForwardIos" />
+        }
     </MudStack>
 }

@@ -69,7 +69,7 @@ public partial class MemorizationLevelTwoPage(
         cards =  
         [..
             (await cardApiHelper.AllByCollectionIdAsync(CardCollectionId))
-            .OrderBy(x => Guid.NewGuid())
+            .OrderBy(_ => Guid.NewGuid())
         ];
         
         isLoading = false;
