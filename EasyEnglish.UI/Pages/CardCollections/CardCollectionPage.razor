@@ -27,6 +27,10 @@ else
                    Disabled="@(cards.Count == 0)">
             Уровень 3
         </MudButton>
+        <MudButton OnClick="OpenTestPage"
+                   Disabled="@(cards.Count == 0)">
+            Тест
+        </MudButton>
     </MudButtonGroup>
 }
 

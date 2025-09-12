@@ -30,11 +30,20 @@ public interface ISnackbarHelper
     /// <param name="header">Заголовок</param>
     /// <param name="confirmButtonText">Текст для кнопки подтверждения</param>
     /// <param name="cancelButtonText">Текст для кнопки отмены</param>
-    /// <returns></returns>
     ValueTask<bool> ShowConfirm(
         string message,
         string header = "Предупреждение",
         string confirmButtonText = "Да",
         string cancelButtonText = "Нет"
+    );
+    
+    /// <summary>
+    /// Показать сообщение с предупреждением
+    /// </summary>
+    /// <param name="message">Сообщение</param>
+    /// <param name="header">Заголовок</param>
+    ValueTask ShowWarningMessageBox(
+        string message,
+        string header = "Внимание"
     );
 }

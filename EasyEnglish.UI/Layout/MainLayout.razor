@@ -17,6 +17,11 @@
                                  Color="Color.Primary" Class="mr-2">
                             <MudMenuItem Label="Профиль" OnClick="OpenProfile"
                                          Icon="@Icons.Material.Filled.Portrait" IconColor="Color.Primary" />
+                            @if (!currentPage.StartsWith("test"))
+                            {
+                                <MudMenuItem Label="Тест" OnClick="OpenTest"
+                                             Icon="@Icons.Material.Outlined.FactCheck" IconColor="Color.Info" />   
+                            }
                             <MudMenuItem Label="Выйти" OnClick="LogOutAsync"
                                          Icon="@Icons.Material.Filled.Logout" IconColor="Color.Error"/>
                         </MudMenu>

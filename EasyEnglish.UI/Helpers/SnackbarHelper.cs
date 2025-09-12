@@ -44,4 +44,12 @@ public class SnackbarHelper(
 
         return result.HasValue && result.Value;
     }
+
+    public async ValueTask ShowWarningMessageBox(string message, string header = "Внимаение")
+    {
+        var result = await dialogService.ShowMessageBox(
+            title: header,
+            message: message
+        );
+    }
 }

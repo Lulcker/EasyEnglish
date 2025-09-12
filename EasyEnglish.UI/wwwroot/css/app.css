@@ -199,11 +199,15 @@ code {
     transform: rotateY(180deg);
 }
 
+.paper-not-show-answer {
+    background-color: rgba(195, 191, 191, 0.38) !important;
+}
+
 .paper-not-answer {
 }
 
 .paper-not-answer:hover {
-    background-color: rgba(195, 191, 191, 0.38);
+    background-color: rgba(195, 191, 191, 0.2);
 }
 
 .paper-correct-answer {

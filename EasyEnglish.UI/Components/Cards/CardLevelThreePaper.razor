@@ -1,54 +1,74 @@
-﻿<MudPaper Elevation="3" Class="pa-4" Height="180px">
+﻿<MudPaper Elevation="3" Class="pa-4 mb-5 position-relative" Height="180px">
+    @if (ShowCurrentIndex)
+    {
+        <MudText Typo="Typo.caption" Class="menu-position">
+            @Index / @CardsCount
+        </MudText>
+    }
     <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-3">
         @Card.RuWord
     </MudText>
-    
-    @if (!IsCorrectAnswer.HasValue)
+
+    @if (!isCorrectAnswer.HasValue)
     {
         <MudTextField T="string" FullWidth Variant="Variant.Outlined"
-                      Placeholder="Ответ" Value="Answer"
-                      ReadOnly="IsCorrectAnswer.HasValue"
-                      ValueChanged="@(v => UpdateAnswer(v))"
-                      Immediate Class="mb-3" />
-        
+                      Placeholder="Ответ" @bind-Value="answer"
+                      ReadOnly="@(isCorrectAnswer.HasValue || ReadOnly)"
+                      Immediate Class="mb-3"/>
+
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
-                   Disabled="@(Answer.IsEmpty())"
+                   Disabled="@(answer.IsEmpty() || ReadOnly)"
                    OnClick="CheckAnswer">
-            Проверить
+            @(ShowAnswer ? "Проверить" : "Ответить")
         </MudButton>
     }
-    @if (IsCorrectAnswer.HasValue && IsCorrectAnswer.Value)
+    @if (ShowAnswer)
     {
-        <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
-            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3 h-56">
-                <MudIcon Color="Color.Success"
-                         Icon="@Icons.Material.Outlined.Check" />
-                
-                <MudText>
-                    @Answer
-                </MudText>
+        if (isCorrectAnswer.HasValue && isCorrectAnswer.Value)
+        {
+            <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
+                <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3 h-56">
+                    <MudIcon Color="Color.Success"
+                             Icon="@Icons.Material.Outlined.Check"/>
+
+                    <MudText>
+                        @answer
+                    </MudText>
+                </MudStack>
+            </MudPaper>
+
+            <MudText>Правильный ответ!</MudText>
+        }
+        else if (isCorrectAnswer.HasValue && !isCorrectAnswer.Value)
+        {
+            <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
+                <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3  h-56">
+                    <MudIcon Color="Color.Error"
+                             Icon="@Icons.Material.Outlined.Close"/>
+
+                    <MudText>
+                        @answer
+                    </MudText>
+                </MudStack>
+            </MudPaper>
+
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Wrap="Wrap.Wrap">
+                <MudText>Правильный ответ:</MudText>
+                <MudText Color="Color.Success"><b>@Card.EnWord</b></MudText>
             </MudStack>
-        </MudPaper>
-        
-        <MudText>Правильный ответ!</MudText>
+        }
     }
-    else if (IsCorrectAnswer.HasValue && !IsCorrectAnswer.Value)
+    else if (isCorrectAnswer.HasValue)
     {
-        <MudPaper Outlined Class=@($"mb-3 h-56 {GetTextFieldClass()}")>
-            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3  h-56">
-                <MudIcon Color="Color.Error"
-                         Icon="@Icons.Material.Outlined.Close" />
-                
+        <MudPaper Outlined Class="mb-3 h-56">
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pa-3 h-56">
                 <MudText>
-                    @Answer
+                    @answer
                 </MudText>
             </MudStack>
         </MudPaper>
-        
-        <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Wrap="Wrap.Wrap">
-            <MudText>Правильный ответ:</MudText>
-            <MudText Color="Color.Success"><b>@Card.EnWord</b></MudText>
-        </MudStack>
+
+        <MudText>Ответ записан</MudText>
     }
 </MudPaper>

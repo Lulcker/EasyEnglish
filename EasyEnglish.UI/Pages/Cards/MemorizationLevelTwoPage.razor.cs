@@ -16,7 +16,7 @@ public partial class MemorizationLevelTwoPage(
     IBreadcrumbHelper breadcrumbHelper
     ) : ComponentBase
 {
-    #region Properties
+    #region Parameters
 
     /// <summary>
     /// Id коллекции карточек

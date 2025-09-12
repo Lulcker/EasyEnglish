@@ -1,5 +1,6 @@
 ﻿using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace EasyEnglish.UI.Layout;
 
@@ -8,12 +9,24 @@ public partial class MainLayout(
     ISnackbarHelper snackbarHelper,
     IUserSession userSession,
     NavigationManager navigationManager
-) : IDisposable
+    ) : IDisposable
 {
-    #region Methods
+    #region Fields
 
-    protected override void OnInitialized() =>
+    private string currentPage = string.Empty;
+
+    #endregion
+    
+    #region Methods
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+        
         breadcrumbHelper.OnChanged += StateHasChanged;
+        navigationManager.LocationChanged += OnLocationChanged;
+    }
 
     private async Task LogOutAsync()
     {
@@ -23,9 +36,23 @@ public partial class MainLayout(
 
     private void OpenProfile() =>
         navigationManager.NavigateTo("/profile");
+
+    private void OpenTest() =>
+        navigationManager.NavigateTo("/test");
     
-    public void Dispose() =>
+    private void OnLocationChanged(object? _, LocationChangedEventArgs e)
+    {
+        currentPage = navigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+    
+    public void Dispose()
+    {
         breadcrumbHelper.OnChanged -= StateHasChanged;
+        navigationManager.LocationChanged -= OnLocationChanged;
+        
+        GC.SuppressFinalize(this);
+    }
 
     #endregion
 }

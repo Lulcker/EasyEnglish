@@ -125,6 +125,9 @@ public partial class CardCollectionPage(
     
     private void OpenLevelThreePage() =>
         navigationManager.NavigateTo($"/memorization-level-three/{CardCollectionId}");
+    
+    private void OpenTestPage() =>
+        navigationManager.NavigateTo($"/test/{CardCollectionId}");
 
     #endregion
 }

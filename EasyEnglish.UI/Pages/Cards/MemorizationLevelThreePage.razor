@@ -11,26 +11,25 @@
         @(currentCardIndex + 1) / @cards.Count
     </MudText>
 
-    <CardLevelThreePaper Card="currentCard"
-                         @bind-Answer="answer"
-                         @bind-IsCorrectAnswer="correctAnswer"
+    <CardLevelThreePaper @ref="cardLevelThreePaper"
+                         Card="currentCard"
+                         OnGivenAnswer="SetGivenAnswer"
                          OnWrongAnswer="@(() => AddWrongCard(cards[currentCardIndex]))" />
 
-    <MudStack Row AlignItems="AlignItems.Center" Class="mt-3">
+    <MudStack Row AlignItems="AlignItems.Center">
         <MudSpacer />
-        @if (currentCardIndex < cards.Count - 1 && correctAnswer is not null)
+        @if (currentCardIndex < cards.Count - 1 && givenAnswer)
         {
             <MudIconButton OnClick="NextCard"
                            Icon="@Icons.Material.Filled.ArrowForwardIos" />
         }
     </MudStack>
     
-    if (currentCardIndex == cards.Count - 1 && correctAnswer is not null)
+    if (currentCardIndex == cards.Count - 1 && givenAnswer)
     {
         if (wrongAnswerCards.Count > 0)
         {
-            <MudStack Row AlignItems="AlignItems.Center"
-                      Class="mt-2" Spacing="2">
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                 <MudText Typo="Typo.h6">
                     Неправильные ответы
                 </MudText>
@@ -48,7 +47,7 @@
         }
         else
         {
-            <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Class="mt-2">
+            <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
                 <MudText Typo="Typo.h6" Color="Color.Success">
                     Все ответы верные!
                 </MudText>

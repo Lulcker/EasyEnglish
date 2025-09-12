@@ -17,58 +17,97 @@ public partial class CardLevelThreePaper : ComponentBase
     public required CardResponseModel Card { get; set; }
     
     /// <summary>
-    /// Ответ
+    /// Показывать текущую позицию
     /// </summary>
-    [Parameter, EditorRequired]
-    public required string Answer { get; set; }
+    [Parameter]
+    public bool ShowCurrentIndex { get; set; }
     
     /// <summary>
-    /// Событие изменения ответа
+    /// Текущий индекс карточки
     /// </summary>
-    [Parameter, EditorRequired]
-    public required EventCallback<string> AnswerChanged { get; set; }
+    [Parameter] 
+    public int Index { get; set; }
     
     /// <summary>
-    /// Правильный ответ?
+    /// Количество карточек
     /// </summary>
-    [Parameter, EditorRequired]
-    public required bool? IsCorrectAnswer { get; set; }
-    
-    /// <summary>
-    /// Событие изменения правильности ответа
-    /// </summary>
-    [Parameter, EditorRequired]
-    public required EventCallback<bool?> IsCorrectAnswerChanged { get; set; }
+    [Parameter]
+    public int CardsCount { get; set; }
     
     /// <summary>
     /// Событие при неправильном ответе
     /// </summary>
-    [Parameter, EditorRequired]
+    [Parameter]
     public EventCallback OnWrongAnswer { get; set; }
+    
+    /// <summary>
+    /// Событие при правильном ответе
+    /// </summary>
+    [Parameter]
+    public EventCallback OnRightAnswer { get; set; }
+    
+    /// <summary>
+    /// Событие при данном ответе
+    /// </summary>
+    [Parameter]
+    public EventCallback OnGivenAnswer { get; set; }
+    
+    /// <summary>
+    /// Только для чтения
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
+    /// Показывать ответ
+    /// </summary>
+    [Parameter] 
+    public bool ShowAnswer { get; set; } = true;
+
+    #endregion
+
+    #region Fields
+
+    /// <summary>
+    /// Ответ
+    /// </summary>
+    private string answer = string.Empty;
+
+    /// <summary>
+    /// Правильный ответ?
+    /// </summary>
+    private bool? isCorrectAnswer;
 
     #endregion
 
     #region Methods
 
-    private async Task UpdateAnswer(string answer) =>
-        await AnswerChanged.InvokeAsync(answer);
+    public void ClearAnswer()
+    {
+        answer = string.Empty;
+        isCorrectAnswer = null;
+    }
 
     private async Task CheckAnswer()
     {
-        var resultEquals = string.Equals(Answer.Trim(), Card.EnWord, StringComparison.CurrentCultureIgnoreCase);
-        
-        await IsCorrectAnswerChanged.InvokeAsync(resultEquals);
-        
-        if (!resultEquals)
+        var resultEquals = string.Equals(answer.Trim(), Card.EnWord, StringComparison.CurrentCultureIgnoreCase);
+
+        isCorrectAnswer = resultEquals;
+
+        if (resultEquals)
+            await OnRightAnswer.InvokeAsync();
+        else
             await OnWrongAnswer.InvokeAsync();
+
+        await OnGivenAnswer.InvokeAsync();
     }
     
     private string GetTextFieldClass()
     {
-        if (!IsCorrectAnswer.HasValue)
+        if (!isCorrectAnswer.HasValue)
             return string.Empty;
 
-        return IsCorrectAnswer switch
+        return isCorrectAnswer switch
         {
             true => "paper-correct-answer",
             false => "paper-wrong-answer",

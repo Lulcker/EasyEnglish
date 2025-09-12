@@ -1,6 +1,7 @@
 ﻿using EasyEnglish.DTO.CardCollections.ResponseModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
+using EasyEnglish.UI.Components.Cards;
 using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -16,7 +17,7 @@ public partial class MemorizationLevelThreePage(
     IBreadcrumbHelper breadcrumbHelper
 ) : ComponentBase
 {
-    #region Properties
+    #region Parameters
 
     /// <summary>
     /// Id коллекции карточек
@@ -35,18 +36,22 @@ public partial class MemorizationLevelThreePage(
     private CardResponseModel? currentCard;
 
     private int currentCardIndex;
-
-    private string answer = string.Empty;
-
-    private bool? correctAnswer;
     
     private readonly HashSet<CardResponseModel> wrongAnswerCards = [];
     
     private bool isShowWrongCards;
 
+    private bool givenAnswer;
+
 #pragma warning disable CS0414 // Field is assigned but its value is never used
     private bool isLoading;
 #pragma warning restore CS0414 // Field is assigned but its value is never used
+
+    #endregion
+
+    #region Refs
+
+    private CardLevelThreePaper cardLevelThreePaper = null!;
 
     #endregion
 
@@ -83,11 +88,13 @@ public partial class MemorizationLevelThreePage(
 
     private void NextCard()
     {
-        answer = string.Empty;
-        correctAnswer = null;
-        
+        cardLevelThreePaper.ClearAnswer();
+        givenAnswer = false;
         currentCard = cards[++currentCardIndex];
     }
+
+    private void SetGivenAnswer() =>
+        givenAnswer = true;
     
     private void AddWrongCard(CardResponseModel card)
         => wrongAnswerCards.Add(card);

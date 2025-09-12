@@ -1,0 +1,86 @@
+﻿@page "/test/{CardCollectionId:guid?}"
+
+<PageTitle>EasyEnglish | Тест</PageTitle>
+
+@if (isTestStarted || isTestFinished)
+{
+    if (!isTestFinished)
+    {
+        <MudText Class="mb-4">
+            Осталось времени: <b>@FormatTime(timeLeft)</b>
+        </MudText>
+    }
+    
+    for (var i = 0; i < cards.Count; i++)
+    {
+        var currentIndex = i;
+        switch (cards[currentIndex].Level)
+        {
+            case CardLevel.One:
+                <CardLevelOnePaper Card="@(cards[currentIndex])"
+                                   Index="@(currentIndex + 1)"
+                                   CardsCount="cards.Count"
+                                   ReadOnly="isTestFinished"
+                                   ShowAnswer="isTestFinished"
+                                   OnRightAnswer="OnRightAnswer"
+                                   OtherAnswerVariants="@(GetOtherAnswerVariants(cards[currentIndex].Id))" />
+                break;
+            case CardLevel.Two:
+                break;
+            case CardLevel.Three:
+                <CardLevelThreePaper Card="@(cards[currentIndex])"
+                                     Index="@(currentIndex + 1)"
+                                     CardsCount="cards.Count"
+                                     ReadOnly="isTestFinished"
+                                     ShowAnswer="isTestFinished"
+                                     OnRightAnswer="OnRightAnswer"
+                                     ShowCurrentIndex />
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+    
+    if (!isTestFinished)
+    {
+        <MudButton OnClick="StopTestAsync"
+                   Variant="Variant.Filled"
+                   Color="Color.Error"
+                   Class="mb-5" >
+            Завершить тест
+        </MudButton>
+    }
+    else
+    {
+        <MudStack AlignItems="AlignItems.Center" Class="mb-3">
+            <MudText>Верно: @countRightAnswer / @cards.Count</MudText>
+        </MudStack>
+        <MudButton OnClick="ResetTest"
+                   Variant="Variant.Filled"
+                   Color="Color.Default"
+                   Class="mb-5">
+            Сбросить
+        </MudButton>
+    }
+}
+else if (!isTestStarted)
+{
+    <MudText Typo="Typo.h6">
+        Настройки теста
+    </MudText>
+    <MudStack Row AlignItems="AlignItems.Center" 
+              Wrap="Wrap.Wrap" Class="mb-4">
+        <MudCheckBox T="bool" @bind-Value="useAnswerChoice"
+                     Label="Использовать выбор ответа" />
+        
+        <MudCheckBox T="bool" @bind-Value="useAnswerWriting"
+                     Label="Использовать написание ответа" />
+    </MudStack>
+    
+    <MudButton OnClick="StartTestAsync"
+               Variant="Variant.Filled"
+               Color="Color.Primary"
+               Disabled="IsStartButtonDisabled">
+        Начать
+    </MudButton>
+}

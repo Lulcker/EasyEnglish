@@ -38,8 +38,26 @@ public partial class CardLevelOnePaper : ComponentBase
     /// <summary>
     /// Событие при неправильном ответе
     /// </summary>
-    [Parameter, EditorRequired]
+    [Parameter]
     public EventCallback OnWrongAnswer { get; set; }
+    
+    /// <summary>
+    /// Событие при правильном ответе
+    /// </summary>
+    [Parameter]
+    public EventCallback OnRightAnswer { get; set; }
+    
+    /// <summary>
+    /// Только для чтения
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
+    /// Показывать ответ
+    /// </summary>
+    [Parameter] 
+    public bool ShowAnswer { get; set; } = true;
 
     #endregion
 
@@ -57,8 +75,18 @@ public partial class CardLevelOnePaper : ComponentBase
 
     private string GetPaperClass(string variant)
     {
+        if (ReadOnly && answer.IsEmpty())
+            return string.Empty;
+        
         if (answer.IsEmpty())
             return "paper-not-answer";
+
+        if (!ShowAnswer)
+        {
+            return answer == variant 
+                ? "paper-not-show-answer" 
+                : string.Empty;
+        }
         
         if (Card.EnWord == variant)
             return "paper-correct-answer";
@@ -95,6 +123,7 @@ public partial class CardLevelOnePaper : ComponentBase
         if (answer == Card.EnWord)
         {
             isCorrectAnswer = true;
+            await OnRightAnswer.InvokeAsync();
         }
         else
         {

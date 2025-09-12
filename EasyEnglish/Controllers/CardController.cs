@@ -15,6 +15,7 @@ namespace EasyEnglish.Controllers;
 [Route("api/card")]
 public class CardController(
     AllCardsByCollectionIdQuery allCardsByCollectionIdQuery,
+    CardsForTestQuery cardsForTestQuery,
     CreateCardCommand createCardCommand,
     UpdateCardCommand updateCardCommand,
     DeleteCardCommand deleteCardCommand
@@ -33,6 +34,14 @@ public class CardController(
     #endregion
 
     #region POST
+    
+    /// <summary>
+    /// Получение списка карточек для теста
+    /// </summary>
+    /// <returns>Список карточек в коллекции</returns>
+    [HttpPost("for-test")]
+    public async Task<ActionResult<IReadOnlyCollection<CardForTestResponseModel>>> GetForTestAsync([FromBody] CardForTestRequestModel requestModel) =>
+        Ok(await cardsForTestQuery.ExecuteAsync(requestModel));
 
     /// <summary>
     /// Создание карточки
