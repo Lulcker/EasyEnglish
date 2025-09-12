@@ -51,16 +51,17 @@ public class CardsForTestQuery(
                 .AsNoTracking()
                 .Where(c => c.CardCollection.UserId == userInfoProvider.Id)
                 .OrderBy(_ => Guid.NewGuid())
-                .GroupBy(c => c.EnWord)
                 .Select(c => new CardForTestResponseModel
                 {
-                    Id = c.First().Id,
-                    RuWord = c.First().RuWord,
-                    EnWord = c.First().EnWord,
-                    AddedAt = c.First().AddedAt
+                    Id = c.Id,
+                    RuWord = c.RuWord,
+                    EnWord = c.EnWord,
+                    AddedAt = c.AddedAt
                 })
-                .Take(20)
+                .Take(25)
                 .ToListAsync();
+
+            cards = [..cards.DistinctBy(c => c.EnWord).Take(20)];
         }
         
         switch (requestModel)

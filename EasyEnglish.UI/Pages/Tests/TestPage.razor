@@ -46,7 +46,7 @@
         <MudButton OnClick="StopTestAsync"
                    Variant="Variant.Filled"
                    Color="Color.Error"
-                   Class="mb-5" >
+                   Class="mb-14" >
             Завершить тест
         </MudButton>
     }
@@ -58,7 +58,7 @@
         <MudButton OnClick="ResetTest"
                    Variant="Variant.Filled"
                    Color="Color.Default"
-                   Class="mb-5">
+                   Class="mb-14">
             Сбросить
         </MudButton>
     }
@@ -80,7 +80,8 @@ else if (!isTestStarted)
     <MudButton OnClick="StartTestAsync"
                Variant="Variant.Filled"
                Color="Color.Primary"
-               Disabled="IsStartButtonDisabled">
+               Disabled="IsStartButtonDisabled"
+               Class="mb-14">
         Начать
     </MudButton>
 }

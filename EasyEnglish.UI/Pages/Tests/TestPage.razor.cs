@@ -1,5 +1,6 @@
 ﻿using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
+using EasyEnglish.DTO.Dictionaries;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
@@ -22,12 +23,6 @@ public partial class TestPage(
     [Parameter]
     public Guid? CardCollectionId { get; set; }
 
-    #endregion
-    
-    #region Consts
-
-    private const int TotalCountSecondsForTest = 120;
-    
     #endregion
     
     #region Fields
@@ -99,7 +94,7 @@ public partial class TestPage(
         
         timer?.Dispose();
         
-        timeLeft = TotalCountSecondsForTest;
+        timeLeft = cards.Sum(x => x.Level is CardLevel.One ? 5 : 10);
         timer = new Timer(Tick, null, 1000, 1000);
     }
 
