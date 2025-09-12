@@ -4,11 +4,18 @@
 
 @if (isTestStarted || isTestFinished)
 {
-    if (!isTestFinished)
+    if (!isTestFinished && timeLeft > 0)
     {
         <MudText Class="mb-4">
             Осталось времени: <b>@FormatTime(timeLeft)</b>
         </MudText>
+    }
+    
+    @if (isDataLoading)
+    {
+        <MudStack AlignItems="AlignItems.Center" Class="mb-3" >
+            <MudProgressCircular Color="Color.Primary" Indeterminate="isDataLoading" />
+        </MudStack>
     }
     
     for (var i = 0; i < cards.Count; i++)
@@ -43,12 +50,15 @@
     
     if (!isTestFinished)
     {
-        <MudButton OnClick="StopTestAsync"
-                   Variant="Variant.Filled"
-                   Color="Color.Error"
-                   Class="mb-14" >
-            Завершить тест
-        </MudButton>
+        if (timeLeft > 0)
+        {
+            <MudButton OnClick="StopTestAsync"
+                       Variant="Variant.Filled"
+                       Color="Color.Error"
+                       Class="mb-14" >
+                Завершить тест
+            </MudButton>
+        }
     }
     else
     {

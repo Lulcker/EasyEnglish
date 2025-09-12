@@ -42,6 +42,8 @@ public partial class TestPage(
     private Timer? timer;
 
     private int countRightAnswer;
+
+    private bool isDataLoading;
     
     #endregion
     
@@ -74,23 +76,29 @@ public partial class TestPage(
 
     private async Task LoadDataAsync()
     {
+        isDataLoading = true;
+
+        await InvokeAsync(StateHasChanged);
+        
         cards = [.. await cardApiHelper.GetForTestAsync(new CardForTestRequestModel
         {
             CardCollectionId = CardCollectionId,
             UseAnswerChoice = useAnswerChoice,
             UseAnswerWriting = useAnswerWriting
         })];
+
+        isDataLoading = false;
     }
 
     private async Task StartTestAsync()
     {
         if (!await snackbarHelper.ShowConfirm("Вы уверены, что хотите начать тест?"))
             return;
-
-        await LoadDataAsync();
         
         isTestStarted = true;
         isTestFinished = false;
+        
+        await LoadDataAsync();
         
         timer?.Dispose();
         
@@ -113,6 +121,8 @@ public partial class TestPage(
     {
         isTestStarted = false;
         isTestFinished = false;
+
+        cards = [];
 
         countRightAnswer = 0;
     }
