@@ -18,7 +18,10 @@ public partial class MainLayout(
     #endregion
     
     #region Methods
-    
+
+    protected override void OnInitialized() =>
+        currentPage = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+
     protected override void OnAfterRender(bool firstRender)
     {
         if (!firstRender)
