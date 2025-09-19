@@ -6,9 +6,11 @@
 {
     if (!isTestFinished && timeLeft > 0)
     {
-        <MudText Class="mb-4">
-            Осталось времени: <b>@FormatTime(timeLeft)</b>
-        </MudText>
+        <div class="timer-container mb-4">
+            <MudText Align="Align.End" Class="pr-4">
+                Осталось времени: <b>@FormatTime(timeLeft)</b>
+            </MudText>
+        </div>
     }
     
     @if (isDataLoading)

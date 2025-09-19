@@ -221,3 +221,9 @@ code {
 .paper-wrong-answer {
     border-color: var(--mud-palette-error) !important;
 }
+
+.timer-container {
+    position: sticky;
+    z-index: 1;
+    top: 25px;
+}
