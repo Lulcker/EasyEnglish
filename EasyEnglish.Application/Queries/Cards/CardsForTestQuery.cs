@@ -41,7 +41,8 @@ public class CardsForTestQuery(
                     Id = c.Id,
                     RuWord = c.RuWord,
                     EnWord = c.EnWord,
-                    AddedAt = c.AddedAt
+                    AddedAt = c.AddedAt,
+                    IsFavorite = c.IsFavorite
                 })
                 .ToListAsync();
         }
@@ -56,7 +57,8 @@ public class CardsForTestQuery(
                     Id = c.Id,
                     RuWord = c.RuWord,
                     EnWord = c.EnWord,
-                    AddedAt = c.AddedAt
+                    AddedAt = c.AddedAt,
+                    IsFavorite = c.IsFavorite
                 })
                 .Take(25)
                 .ToListAsync();

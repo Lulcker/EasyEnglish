@@ -1,0 +1,37 @@
+﻿@page "/favorite-cards"
+
+<PageTitle>EasyEnglish | Избранные</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">
+    Избранные карточки @(cards.Count > 0 ? $"[{cards.Count}]" : string.Empty)
+</MudText>
+
+@if (cards.Count == 0 && !isDataLoading)
+{
+    <MudText Typo="Typo.h5" Class="mb-3">
+        Нет карточек
+    </MudText>
+}
+else
+{
+    <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" FullWidth Class="mb-5">
+        <MudButton OnClick="OpenLevelOnePage"
+                   Disabled="@(cards.Count < 4)">
+            Уровень 1
+        </MudButton>
+        <MudButton OnClick="OpenLevelTwoPage"
+                   Disabled="@(cards.Count == 0)">
+            Уровень 2
+        </MudButton>
+        <MudButton OnClick="OpenLevelThreePage"
+                   Disabled="@(cards.Count == 0)">
+            Уровень 3
+        </MudButton>
+    </MudButtonGroup>
+}
+
+@foreach (var card in cards)
+{
+    <CardPaper Card="card"
+               OnSave="LoadCardsAsync"/>
+}

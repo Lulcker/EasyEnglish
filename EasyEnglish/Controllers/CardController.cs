@@ -15,11 +15,13 @@ namespace EasyEnglish.Controllers;
 [Route("api/card")]
 public class CardController(
     AllCardsByCollectionIdQuery allCardsByCollectionIdQuery,
+    AllFavoriteCardsQuery allFavoriteCardsQuery,
     CardsForTestQuery cardsForTestQuery,
     CreateCardCommand createCardCommand,
     UpdateCardCommand updateCardCommand,
+    ToggleCardFavoriteCommand toggleCardFavoriteCommand,
     DeleteCardCommand deleteCardCommand
-) : ControllerBase
+    ) : ControllerBase
 {
     #region GET
 
@@ -30,6 +32,14 @@ public class CardController(
     [HttpGet("all-by-collection/{cardCollectionId:guid}")]
     public async Task<ActionResult<IReadOnlyCollection<CardResponseModel>>> AllByCollectionIdAsync([FromRoute] Guid cardCollectionId) =>
         Ok(await allCardsByCollectionIdQuery.ExecuteAsync(cardCollectionId));
+
+    /// <summary>
+    /// Получение списка избранных карточек
+    /// </summary>
+    /// <returns>Список избранных карточек</returns>
+    [HttpGet("all-favorite")]
+    public async Task<ActionResult<IReadOnlyCollection<CardResponseModel>>> AllFavoriteAsync() =>
+        Ok(await allFavoriteCardsQuery.ExecuteAsync());
 
     #endregion
 
@@ -66,6 +76,17 @@ public class CardController(
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateCardRequestModel requestModel)
     {
         await updateCardCommand.ExecuteAsync(requestModel);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Изменение избранности карточки
+    /// </summary>
+    /// <param name="cardId">Id карточки</param>
+    [HttpPatch("toggle-favorite/{cardId:guid}")]
+    public async Task<IActionResult> ToggleFavoriteAsync([FromRoute] Guid cardId)
+    {
+        await toggleCardFavoriteCommand.ExecuteAsync(cardId);
         return Ok();
     }
 

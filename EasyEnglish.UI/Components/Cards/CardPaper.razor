@@ -28,7 +28,7 @@
             </MudButton>
         </MudStack>
                 
-        @if (isLoading)
+        if (isLoading)
         {
             <MudProgressLinear Color="Color.Primary" Indeterminate="isLoading"
                                Class="mt-2" />
@@ -36,7 +36,7 @@
     }
     else
     {
-        <MudStack Spacing="2">
+        <MudStack Spacing="1" Class="pt-3">
             <MudText Typo="Typo.h6">
                 Слово на русском: <b>@Card.RuWord</b>
             </MudText>
@@ -45,9 +45,13 @@
             </MudText>
         </MudStack>
         
-        @if (!ReadOnly)
-        {
-            <div class="menu-position">
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="menu-position">
+            
+            <MudIconButton Icon="@(Card.IsFavorite ? Icons.Material.Filled.Favorite : Icons.Material.Filled.FavoriteBorder)"
+                           OnClick="ToggleFavoriteAsync" Size="Size.Small"
+                           Color="Color.Error" />
+            @if (!ReadOnly)
+            {
                 <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense>
                     <MudMenuItem OnClick="SetUpdateMode" IconColor="Color.Primary"
                                  Icon="@Icons.Material.Filled.Edit">
@@ -58,7 +62,7 @@
                         Удалить
                     </MudMenuItem>
                 </MudMenu>
-            </div>
-        }
+            }
+        </MudStack>
     }
 </MudPaper>

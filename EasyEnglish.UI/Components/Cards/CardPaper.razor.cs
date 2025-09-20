@@ -110,5 +110,17 @@ public partial class CardPaper(
         await OnSave.InvokeAsync();
     }
 
+    private async Task ToggleFavoriteAsync()
+    {
+        await cardApiHelper.ToggleFavoriteAsync(Card.Id);
+
+        Card.IsFavorite = !Card.IsFavorite;
+
+        if (Card.IsFavorite)
+            await snackbarHelper.ShowSuccess("Карточка добавлена в избранное");
+        else
+            await snackbarHelper.ShowSuccess("Карточка удалена из избранного");
+    }
+
     #endregion
 }

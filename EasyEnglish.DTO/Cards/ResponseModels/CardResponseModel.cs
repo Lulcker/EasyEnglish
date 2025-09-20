@@ -24,4 +24,9 @@ public class CardResponseModel
     /// Дата добавления
     /// </summary>
     public required DateTime AddedAt { get; init; }
+    
+    /// <summary>
+    /// Избранная
+    /// </summary>
+    public required bool IsFavorite { get; set; }
 }

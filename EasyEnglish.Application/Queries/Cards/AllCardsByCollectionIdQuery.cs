@@ -34,7 +34,8 @@ public class AllCardsByCollectionIdQuery(
                 Id = c.Id,
                 RuWord = c.RuWord,
                 EnWord = c.EnWord,
-                AddedAt = c.AddedAt
+                AddedAt = c.AddedAt,
+                IsFavorite = c.IsFavorite
             })
             .OrderByDescending(c => c.AddedAt)
             .ToListAsync();

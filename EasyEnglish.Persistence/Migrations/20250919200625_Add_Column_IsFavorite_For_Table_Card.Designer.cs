@@ -3,6 +3,7 @@ using System;
 using EasyEnglish.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyEnglish.Persistence.Migrations
 {
     [DbContext(typeof(EasyEnglishDbContext))]
-    partial class EasyEnglishDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250919200625_Add_Column_IsFavorite_For_Table_Card")]
+    partial class Add_Column_IsFavorite_For_Table_Card
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

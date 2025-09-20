@@ -39,6 +39,9 @@ public partial class MainLayout(
 
     private void OpenProfile() =>
         navigationManager.NavigateTo("/profile");
+    
+    private void OpenFavoriteCards() =>
+        navigationManager.NavigateTo("/favorite-cards");
 
     private void OpenTest() =>
         navigationManager.NavigateTo("/test");

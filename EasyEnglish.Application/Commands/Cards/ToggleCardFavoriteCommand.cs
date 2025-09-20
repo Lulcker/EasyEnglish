@@ -1,0 +1,37 @@
+﻿using EasyEnglish.Application.Contracts.Providers;
+using EasyEnglish.Domain.Entities;
+using EasyEnglish.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace EasyEnglish.Application.Commands.Cards;
+
+/// <summary>
+/// Изменение избранности карточки
+/// </summary>
+public class ToggleCardFavoriteCommand(
+    IRepository<Card> cardRepository,
+    IUnitOfWork unitOfWork,
+    IUserInfoProvider userInfoProvider,
+    ILogger<ToggleCardFavoriteCommand> logger
+    )
+{
+    public async Task ExecuteAsync(Guid cardId)
+    {
+        var card = await cardRepository
+            .Include(c => c.CardCollection)
+            .FirstOrDefaultAsync(c => c.Id == cardId);
+        
+        card.ThrowIfNull("Карточка не найдена");
+        
+        (card.CardCollection.UserId == userInfoProvider.Id)
+            .ThrowAccessIfInvalidCondition();
+
+        card.IsFavorite = !card.IsFavorite;
+
+        await unitOfWork.SaveChangesAsync();
+        
+        logger.LogInformation("Изменено свойство IsFavorite у карточки с Id: {CardId}. Новое значение: {IsFavorite}. Пользователь: {UserEmail} (Id: {UserId})",
+            cardId, card.IsFavorite, userInfoProvider.Email, userInfoProvider.Id);
+    }
+}

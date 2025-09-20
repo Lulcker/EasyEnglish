@@ -1,12 +1,16 @@
-﻿@page "/memorization-level-three/{CardCollectionId:guid}"
+﻿@page "/memorization-level-three"
+@page "/memorization-level-three/{CardCollectionId:guid}"
 
-<PageTitle>EasyEnglish | @cardCollection?.Title | Уровень 3</PageTitle>
+<PageTitle>EasyEnglish | @title</PageTitle>
 
-@if (cardCollection is not null && currentCard is not null)
+@if (currentCard is not null)
 {
-    <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-1">
-        @cardCollection.Title
-    </MudText>
+    if (cardCollection is not null)
+    {
+        <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-1">
+            @cardCollection.Title
+        </MudText>   
+    }
     <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-5">
         @(currentCardIndex + 1) / @cards.Count
     </MudText>

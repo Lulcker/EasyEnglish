@@ -1,19 +1,23 @@
-﻿@page "/memorization-level-one/{CardCollectionId:guid}"
+﻿@page "/memorization-level-one"
+@page "/memorization-level-one/{CardCollectionId:guid}"
 
-<PageTitle>EasyEnglish | @cardCollection?.Title | Уровень 1</PageTitle>
+<PageTitle>EasyEnglish | @title</PageTitle>
 
-@if (cardCollection is not null && cards.Count > 0)
+@if (cards.Count > 0)
 {
-    <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-5">
-        @cardCollection.Title
-    </MudText>
+    if (cardCollection is not null)
+    {
+        <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-5">
+            @cardCollection.Title
+        </MudText>
+    }
 
     for (var i = 0; i < cards.Count; i++)
     {
         var currentIndex = i;
         <CardLevelOnePaper Card="@(cards[currentIndex])"
                            Index="@(currentIndex + 1)"
-                           CardsCount="cardCollection.CardsCount"
+                           CardsCount="cards.Count"
                            OtherAnswerVariants="@(GetOtherAnswerVariants(cards[currentIndex].Id))"
                            OnWrongAnswer="@(() => AddWrongCard(cards[currentIndex]))" />
     }

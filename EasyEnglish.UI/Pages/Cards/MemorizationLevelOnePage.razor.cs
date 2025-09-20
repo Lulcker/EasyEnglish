@@ -22,11 +22,13 @@ public partial class MemorizationLevelOnePage(
     /// Id коллекции карточек
     /// </summary>
     [Parameter]
-    public required Guid CardCollectionId { get; set; }
+    public Guid? CardCollectionId { get; set; }
 
     #endregion
     
     #region Fields
+
+    private string title = string.Empty;
     
     private CardCollectionResponseModel? cardCollection;
 
@@ -47,26 +49,53 @@ public partial class MemorizationLevelOnePage(
     protected override async Task OnInitializedAsync()
     {
         await LoadDataAsync();
-        
-        breadcrumbHelper.SetBreadcrumbs(
-        [
-            new BreadcrumbItem("Коллекции", "/card-collections"),
-            new BreadcrumbItem($"{cardCollection?.Title}", $"/card-collection/{CardCollectionId}"),
-            new BreadcrumbItem("Уровень 1", $"/memorization-level-one/{CardCollectionId}")
-        ]);
+
+        if (CardCollectionId.HasValue)
+        {
+            breadcrumbHelper.SetBreadcrumbs(
+            [
+                new BreadcrumbItem("Коллекции", "/card-collections"),
+                new BreadcrumbItem($"{cardCollection!.Title}", $"/card-collection/{CardCollectionId}"),
+                new BreadcrumbItem("Уровень 1", $"/memorization-level-one/{CardCollectionId}")
+            ]);
+
+            title = $"{cardCollection!.Title} | Уровень 1";
+        }
+        else
+        {
+            breadcrumbHelper.SetBreadcrumbs(
+            [
+                new BreadcrumbItem("К коллекциям", "/card-collections"),
+                new BreadcrumbItem("Избранные", "/favorite-cards"),
+                new BreadcrumbItem("Уровень 1", "/memorization-level-one")
+            ]);
+            
+            title = "Избранные | Уровень 1";
+        }
     }
 
     private async Task LoadDataAsync()
     {
         isLoading = true;
+
+        if (CardCollectionId.HasValue)
+        {
+            cardCollection = await cardCollectionApiHelper.GetByIdAsync(CardCollectionId.Value);
         
-        cardCollection = await cardCollectionApiHelper.GetByIdAsync(CardCollectionId);
-        
-        cards =  
-        [..
-            (await cardApiHelper.AllByCollectionIdAsync(CardCollectionId))
-            .OrderBy(_ => Guid.NewGuid())
-        ];
+            cards =  
+            [..
+                (await cardApiHelper.AllByCollectionIdAsync(CardCollectionId.Value))
+                .OrderBy(_ => Guid.NewGuid())
+            ];
+        }
+        else
+        {
+            cards =
+            [..
+                (await cardApiHelper.AllFavoriteAsync())
+                .OrderBy(_ => Guid.NewGuid())
+            ];
+        }
         
         isLoading = false;
     }

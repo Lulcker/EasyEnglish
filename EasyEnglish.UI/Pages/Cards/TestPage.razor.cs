@@ -6,8 +6,11 @@ using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace EasyEnglish.UI.Pages.Tests;
+namespace EasyEnglish.UI.Pages.Cards;
 
+/// <summary>
+/// Страница с тестом
+/// </summary>
 public partial class TestPage(
     CardApiHelper cardApiHelper,
     CardCollectionApiHelper cardCollectionApiHelper,

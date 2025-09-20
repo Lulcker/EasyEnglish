@@ -20,7 +20,7 @@ public partial class CardCollectionPage(
     ISnackbarHelper snackbarHelper
     ) : ComponentBase
 {
-    #region Properties
+    #region Parameters
 
     /// <summary>
     /// Id коллекции карточек

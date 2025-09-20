@@ -31,4 +31,9 @@ public class Card : EntityBase
     /// Коллекция карточек
     /// </summary>
     public CardCollection CardCollection { get; init; } = null!;
+    
+    /// <summary>
+    /// Избранная
+    /// </summary>
+    public bool IsFavorite { get; set; }
 }
