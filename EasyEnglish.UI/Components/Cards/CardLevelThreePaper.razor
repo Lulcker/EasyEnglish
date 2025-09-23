@@ -22,7 +22,8 @@
         <MudTextField T="string" FullWidth Variant="Variant.Outlined"
                       Placeholder="Ответ" @bind-Value="answer"
                       ReadOnly="@(isCorrectAnswer.HasValue || ReadOnly)"
-                      Immediate Class="mb-3"/>
+                      Immediate Class="mb-3"
+                      OnKeyDown="HandleKeyDown" />
 
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"

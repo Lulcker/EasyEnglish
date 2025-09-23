@@ -2,6 +2,7 @@
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace EasyEnglish.UI.Components.Cards;
 
@@ -130,6 +131,12 @@ public partial class CardLevelThreePaper(
             await snackbarHelper.ShowSuccess("Карточка добавлена в избранное");
         else
             await snackbarHelper.ShowSuccess("Карточка удалена из избранного");
+    }
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key is "Enter")
+            await CheckAnswer();
     }
 
     #endregion
