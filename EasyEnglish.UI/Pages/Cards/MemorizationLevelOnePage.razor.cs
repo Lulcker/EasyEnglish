@@ -65,7 +65,7 @@ public partial class MemorizationLevelOnePage(
         {
             breadcrumbHelper.SetBreadcrumbs(
             [
-                new BreadcrumbItem("К коллекциям", "/card-collections"),
+                new BreadcrumbItem("Коллекции", "/card-collections"),
                 new BreadcrumbItem("Избранные", "/favorite-cards"),
                 new BreadcrumbItem("Уровень 1", "/memorization-level-one")
             ]);

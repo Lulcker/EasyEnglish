@@ -1,10 +1,18 @@
 ﻿<MudPaper Elevation="3" Class="pa-4 mb-5 position-relative" Height="180px">
-    @if (ShowCurrentIndex)
-    {
-        <MudText Typo="Typo.caption" Class="menu-position">
-            @Index / @CardsCount
-        </MudText>
-    }
+    <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="menu-position">
+        @if (ReadOnly || ShowAnswer)
+        {
+            <MudIconButton Icon="@(Card.IsFavorite ? Icons.Material.Filled.Favorite : Icons.Material.Filled.FavoriteBorder)"
+                           OnClick="ToggleFavoriteAsync" Size="Size.Small"
+                           Color="Color.Error"/>
+        }
+        @if (ShowCurrentIndex)
+        {
+            <MudText Typo="Typo.caption">
+                @Index / @CardsCount
+            </MudText>
+        }
+    </MudStack>
     <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-3">
         @Card.RuWord
     </MudText>

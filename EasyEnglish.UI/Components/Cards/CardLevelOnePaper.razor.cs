@@ -1,4 +1,6 @@
 ﻿using EasyEnglish.DTO.Cards.ResponseModels;
+using EasyEnglish.ProxyApiMethods.ApiMethods;
+using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
 
@@ -7,7 +9,10 @@ namespace EasyEnglish.UI.Components.Cards;
 /// <summary>
 /// Карточка для уровня 1
 /// </summary>
-public partial class CardLevelOnePaper : ComponentBase
+public partial class CardLevelOnePaper(
+    CardApiHelper cardApiHelper,
+    ISnackbarHelper snackbarHelper
+    ) : ComponentBase
 {
     #region Parameters
 
@@ -130,6 +135,18 @@ public partial class CardLevelOnePaper : ComponentBase
             isCorrectAnswer = false;
             await OnWrongAnswer.InvokeAsync();
         }
+    }
+    
+    private async Task ToggleFavoriteAsync()
+    {
+        await cardApiHelper.ToggleFavoriteAsync(Card.Id);
+
+        Card.IsFavorite = !Card.IsFavorite;
+
+        if (Card.IsFavorite)
+            await snackbarHelper.ShowSuccess("Карточка добавлена в избранное");
+        else
+            await snackbarHelper.ShowSuccess("Карточка удалена из избранного");
     }
 
     #endregion
