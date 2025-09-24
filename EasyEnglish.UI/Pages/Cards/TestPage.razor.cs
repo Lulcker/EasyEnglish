@@ -46,6 +46,8 @@ public partial class TestPage(
 
     private int countRightAnswer;
 
+    private int countWrongAnswer;
+
     private bool isDataLoading;
     
     #endregion
@@ -135,20 +137,21 @@ public partial class TestPage(
         if (timeLeft > 0)
             timeLeft--;
         else
-            StopTimer(false);
+            StopTimer(false, "Время завершилось!");
 
         InvokeAsync(StateHasChanged);
     }
 
-    private void StopTimer(bool manually)
+    private void StopTimer(bool manually, string message = "")
     {
         isTestStarted = false;
         isTestFinished = true;
-            
+        
         timer?.Dispose();
+        timer = null;
 
         if (!manually)
-            _ = snackbarHelper.ShowWarningMessageBox("Время завершилось!");
+            _ = snackbarHelper.ShowWarningMessageBox(message);
     }
     
     private List<string> GetOtherAnswerVariants(Guid currentCardId) =>
@@ -159,7 +162,25 @@ public partial class TestPage(
             .Take(3)
     ];
 
-    private void OnRightAnswer() => countRightAnswer++;
+    private void OnRightAnswer()
+    {
+        countRightAnswer++;
+        
+        CheckAndStopTimer();
+    }
+    
+    private void OnWrongAnswer()
+    {
+        countWrongAnswer++;
+
+        CheckAndStopTimer();
+    }
+
+    private void CheckAndStopTimer()
+    {
+        if (countRightAnswer + countWrongAnswer == cards.Count)
+            StopTimer(true);
+    }
     
     private static string FormatTime(int seconds) => 
         TimeSpan.FromSeconds(seconds).ToString(@"mm\:ss");

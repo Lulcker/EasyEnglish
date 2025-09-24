@@ -32,6 +32,7 @@
                                    ReadOnly="isTestFinished"
                                    ShowAnswer="isTestFinished"
                                    OnRightAnswer="OnRightAnswer"
+                                   OnWrongAnswer="OnWrongAnswer"
                                    OtherAnswerVariants="@(GetOtherAnswerVariants(cards[currentIndex].Id))" />
                 break;
             case CardLevel.Two:
@@ -43,6 +44,7 @@
                                      ReadOnly="isTestFinished"
                                      ShowAnswer="isTestFinished"
                                      OnRightAnswer="OnRightAnswer"
+                                     OnWrongAnswer="OnWrongAnswer"
                                      ShowCurrentIndex />
                 break;
             default:
