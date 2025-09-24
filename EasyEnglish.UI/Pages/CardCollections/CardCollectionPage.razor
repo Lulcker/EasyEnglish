@@ -48,13 +48,17 @@ else
     <MudPaper Class="pa-4 mb-3">
         <MudTextField Label="Слово на русском"
                       @bind-Value="newRuWord"
-                      Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Variant="Variant.Outlined"
+                      Class="mb-2" Immediate AutoFocus
+                      OnKeyDown="HandleKeyDown"
+                      @ref="newRuWordTextField" />
 
         <MudTextField Label="Слово на английском"
                       @bind-Value="newEnWord"
-                      Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Variant="Variant.Outlined"
+                      Class="mb-2" Immediate 
+                      OnKeyDown="HandleKeyDown"
+                      @ref="newEnWordTextField"/>
 
         <MudStack Row AlignItems="AlignItems.Center">
             <MudButton OnClick="UnsetAndClearAddedMode"
@@ -73,9 +77,9 @@ else
             </MudButton>
         </MudStack>
 
-        @if (isUpdateLoading)
+        @if (isAddedLoading)
         {
-            <MudProgressLinear Color="Color.Primary" Indeterminate="isUpdateLoading"
+            <MudProgressLinear Color="Color.Primary" Indeterminate="isAddedLoading"
                                Class="mt-2"/>
         }
     </MudPaper>

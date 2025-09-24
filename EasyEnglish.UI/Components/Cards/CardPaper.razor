@@ -4,12 +4,16 @@
         <MudTextField Label="Слово на русском"
                       @bind-Value="newRuWord"
                       Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Class="mb-3" AutoFocus
+                      OnKeyDown="HandleKeyDown"
+                      @ref="newRuWordTextField" />
         
         <MudTextField Label="Слово на английском"
                       @bind-Value="newEnWord"
-                      Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Variant="Variant.Outlined"
+                      Class="mb-2" Immediate
+                      OnKeyDown="HandleKeyDown"
+                      @ref="newEnWordTextField" />
 
         <MudStack Row AlignItems="AlignItems.Center">
             <MudButton OnClick="UnsetAndClearUpdateMode"

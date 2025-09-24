@@ -5,6 +5,7 @@ using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace EasyEnglish.UI.Pages.CardCollections;
@@ -44,13 +45,21 @@ public partial class CardCollectionPage(
 
     private bool isDataLoading;
 
-    private bool isUpdateLoading;
+    private bool isAddedLoading;
+
+    #endregion
+    
+    #region Refs
+
+    private MudTextField<string> newRuWordTextField = null!;
+    
+    private MudTextField<string> newEnWordTextField = null!;
 
     #endregion
     
     #region Properties
 
-    private bool IsSaveButtonDisabled => newRuWord.IsEmpty() || newEnWord.IsEmpty() || isUpdateLoading;
+    private bool IsSaveButtonDisabled => newRuWord.IsEmpty() || newEnWord.IsEmpty() || isAddedLoading;
 
     #endregion
 
@@ -94,7 +103,10 @@ public partial class CardCollectionPage(
 
     private async Task SaveAsync()
     {
-        isUpdateLoading = true;
+        if (IsSaveButtonDisabled)
+            return;
+        
+        isAddedLoading = true;
 
         try
         {
@@ -113,7 +125,27 @@ public partial class CardCollectionPage(
         }
         finally
         {
-            isUpdateLoading = false;
+            isAddedLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowUp":
+                await newRuWordTextField.FocusAsync();
+                break;
+            case "ArrowDown":
+                await newEnWordTextField.FocusAsync();
+                break;
+            case "Enter":
+                await SaveAsync();
+                break;
+            case "Escape":
+                UnsetAndClearAddedMode();
+                break;
         }
     }
 

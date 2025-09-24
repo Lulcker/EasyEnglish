@@ -4,6 +4,7 @@ using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace EasyEnglish.UI.Pages.CardCollections;
@@ -66,7 +67,7 @@ public partial class CardCollectionsPage(
         isAddedMode = false;
     }
 
-    private async Task Save()
+    private async Task SaveAsync()
     {
         isUpdateLoading = true;
 
@@ -86,6 +87,20 @@ public partial class CardCollectionsPage(
         finally
         {
             isUpdateLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Enter":
+                await SaveAsync();
+                break;
+            case "Escape":
+                UnsetAndClearAddedMode();
+                break;
         }
     }
 

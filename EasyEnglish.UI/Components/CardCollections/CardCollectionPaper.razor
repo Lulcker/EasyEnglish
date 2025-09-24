@@ -5,7 +5,8 @@
         <MudTextField Label="Название коллекции"
                       @bind-Value="newTitle"
                       Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Class="mb-2" AutoFocus
+                      OnKeyDown="HandleKeyDown" />
 
         <MudStack Row AlignItems="AlignItems.Center">
             <MudButton OnClick="UnsetAndClearUpdateMode"

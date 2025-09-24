@@ -15,7 +15,7 @@ public class UpdateCardCommand(
     IUnitOfWork unitOfWork,
     IUserInfoProvider userInfoProvider,
     ILogger<UpdateCardCommand> logger
-)
+    )
 {
     public async Task ExecuteAsync(UpdateCardRequestModel requestModel)
     {
@@ -31,6 +31,12 @@ public class UpdateCardCommand(
         
         (card.CardCollection.UserId == userInfoProvider.Id)
             .ThrowAccessIfInvalidCondition();
+        
+        var existsCard = await cardRepository
+            .SingleOrDefaultAsync(c => c.CardCollectionId == card.CardCollectionId &&
+                                       c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower());
+        
+        existsCard.ThrowIfNotNull("Карточка с таким словом уже существует в этой коллекции");
 
         var oldRuWord = card.RuWord;
         var oldEnWord = card.EnWord;
@@ -40,7 +46,7 @@ public class UpdateCardCommand(
 
         await unitOfWork.SaveChangesAsync();
         
-        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord}  пользователем с Email: {UserEmail} (Id: {UserId})",
+        logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord} пользователем с Email: {UserEmail} (Id: {UserId})",
             oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

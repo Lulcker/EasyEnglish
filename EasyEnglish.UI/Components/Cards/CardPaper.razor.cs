@@ -4,6 +4,8 @@ using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
 
 namespace EasyEnglish.UI.Components.Cards;
 
@@ -49,6 +51,14 @@ public partial class CardPaper(
 
     #endregion
 
+    #region Refs
+
+    private MudTextField<string> newRuWordTextField = null!;
+    
+    private MudTextField<string> newEnWordTextField = null!;
+
+    #endregion
+
     #region Properties
 
     private bool IsSaveButtonDisabled => (newRuWord.Trim().Equals(Card.RuWord, StringComparison.CurrentCultureIgnoreCase) &&
@@ -74,6 +84,9 @@ public partial class CardPaper(
 
     private async Task SaveAsync()
     {
+        if (IsSaveButtonDisabled)
+            return;
+        
         isLoading = true;
 
         try
@@ -95,6 +108,7 @@ public partial class CardPaper(
         finally
         {
             isLoading = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -120,6 +134,25 @@ public partial class CardPaper(
             await snackbarHelper.ShowSuccess("Карточка добавлена в избранное");
         else
             await snackbarHelper.ShowSuccess("Карточка удалена из избранного");
+    }
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowUp":
+                await newRuWordTextField.FocusAsync();
+                break;
+            case "ArrowDown":
+                await newEnWordTextField.FocusAsync();
+                break;
+            case "Enter":
+                await SaveAsync();
+                break;
+            case "Escape":
+                UnsetAndClearUpdateMode();
+                break;
+        }
     }
 
     #endregion

@@ -4,6 +4,7 @@ using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace EasyEnglish.UI.Components.CardCollections;
 
@@ -61,6 +62,9 @@ public partial class CardCollectionPaper(
 
     private async Task SaveAsync()
     {
+        if (IsSaveButtonDisabled)
+            return;
+        
         isLoading = true;
 
         try
@@ -80,6 +84,7 @@ public partial class CardCollectionPaper(
         finally
         {
             isLoading = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -97,6 +102,19 @@ public partial class CardCollectionPaper(
 
     private void OpenCardCollectionPage() =>
         navigationManager.NavigateTo($"/card-collection/{CardCollection.Id}");
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Enter":
+                await SaveAsync();
+                break;
+            case "Escape":
+                UnsetAndClearUpdateMode();
+                break;
+        }
+    }
 
     #endregion
 }

@@ -29,7 +29,8 @@ else
         <MudTextField Label="Название коллекции"
                       @bind-Value="newCollectionTitle"
                       Variant="Variant.Outlined" Immediate
-                      Class="mb-2"/>
+                      Class="mb-2" AutoFocus
+                      OnKeyDown="HandleKeyDown" />
 
         <MudStack Row AlignItems="AlignItems.Center">
             <MudButton OnClick="UnsetAndClearAddedMode"
@@ -40,7 +41,7 @@ else
 
             <MudSpacer/>
 
-            <MudButton OnClick="Save"
+            <MudButton OnClick="SaveAsync"
                        Disabled="IsSaveButtonDisabled"
                        Color="Color.Primary" Class="mt-1"
                        Variant="Variant.Filled">
