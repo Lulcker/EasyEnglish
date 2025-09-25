@@ -44,6 +44,7 @@ public class ExceptionHandler(
                 break;
             case InternalServerErrorException:
             case BusinessException:
+            case ConfirmActionException:
                 _ = snackbarHelper.ShowError(exception.Message);
                 break;
         }

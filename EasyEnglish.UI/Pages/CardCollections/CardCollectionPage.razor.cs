@@ -1,6 +1,7 @@
 ﻿using EasyEnglish.DTO.CardCollections.ResponseModels;
 using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
+using EasyEnglish.ProxyApiMethods;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
@@ -46,6 +47,10 @@ public partial class CardCollectionPage(
     private bool isDataLoading;
 
     private bool isAddedLoading;
+
+    private string confirmText = string.Empty;
+        
+    private bool isConfirmAction;
 
     #endregion
     
@@ -98,7 +103,9 @@ public partial class CardCollectionPage(
     {
         newRuWord = string.Empty;
         newEnWord = string.Empty;
+        confirmText = string.Empty;
         isAddedMode = false;
+        isConfirmAction = false;
     }
 
     private async Task SaveAsync()
@@ -114,14 +121,20 @@ public partial class CardCollectionPage(
             {
                 RuWord = newRuWord.Trim(),
                 EnWord = newEnWord.Trim(),
-                CardCollectionId = CardCollectionId
+                CardCollectionId = CardCollectionId,
+                IsConfirmAction = isConfirmAction
             });
-            
+
             UnsetAndClearAddedMode();
 
             await snackbarHelper.ShowSuccess("Карточка добавлена");
 
             await LoadCardsAsync();
+        }
+        catch (ConfirmActionException ex)
+        {
+            confirmText = ex.Message;
+            isConfirmAction = true;
         }
         finally
         {

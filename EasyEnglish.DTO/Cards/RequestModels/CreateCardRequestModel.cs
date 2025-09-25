@@ -19,4 +19,9 @@ public class CreateCardRequestModel
     /// Id коллекции карточек
     /// </summary>
     public required Guid CardCollectionId { get; init; }
+    
+    /// <summary>
+    /// Подтверждение действия
+    /// </summary>
+    public required bool IsConfirmAction { get; init; }
 }

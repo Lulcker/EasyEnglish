@@ -1,5 +1,6 @@
 ﻿using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
+using EasyEnglish.ProxyApiMethods;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
@@ -48,6 +49,10 @@ public partial class CardPaper(
     private bool isEditMode;
 
     private bool isLoading;
+    
+    private string confirmText = string.Empty;
+        
+    private bool isConfirmAction;
 
     #endregion
 
@@ -78,8 +83,10 @@ public partial class CardPaper(
     private void UnsetAndClearUpdateMode()
     {
         isEditMode = false;
+        isConfirmAction = false;
         newRuWord = string.Empty;
         newEnWord = string.Empty;
+        confirmText = string.Empty;
     }
 
     private async Task SaveAsync()
@@ -95,7 +102,8 @@ public partial class CardPaper(
             {
                 Id = Card.Id,
                 RuWord = newRuWord.Trim(),
-                EnWord = newEnWord.Trim()
+                EnWord = newEnWord.Trim(),
+                IsConfirmAction = isConfirmAction
             });
             
             await snackbarHelper.ShowSuccess("Карточка обновлена");
@@ -104,6 +112,11 @@ public partial class CardPaper(
             Card.EnWord = newEnWord.Trim().UppercaseFirstLetter();
 
             UnsetAndClearUpdateMode();
+        }
+        catch (ConfirmActionException ex)
+        {
+            confirmText = ex.Message;
+            isConfirmAction = true;
         }
         finally
         {

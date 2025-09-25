@@ -35,7 +35,6 @@ public class CardsForTestQuery(
             cards = await cardRepository
                 .AsNoTracking()
                 .Where(c => c.CardCollectionId == requestModel.CardCollectionId)
-                .OrderBy(_ => Guid.NewGuid())
                 .Select(c => new CardForTestResponseModel
                 {
                     Id = c.Id,
@@ -44,6 +43,7 @@ public class CardsForTestQuery(
                     AddedAt = c.AddedAt,
                     IsFavorite = c.IsFavorite
                 })
+                .OrderBy(_ => Guid.NewGuid())
                 .ToListAsync();
         }
         else
@@ -51,19 +51,18 @@ public class CardsForTestQuery(
             cards = await cardRepository
                 .AsNoTracking()
                 .Where(c => c.CardCollection.UserId == userInfoProvider.Id)
-                .OrderBy(_ => Guid.NewGuid())
+                .GroupBy(c => c.RuWord)
                 .Select(c => new CardForTestResponseModel
                 {
-                    Id = c.Id,
-                    RuWord = c.RuWord,
-                    EnWord = c.EnWord,
-                    AddedAt = c.AddedAt,
-                    IsFavorite = c.IsFavorite
+                    Id = c.First().Id,
+                    RuWord = c.First().RuWord,
+                    EnWord = c.First().EnWord,
+                    AddedAt = c.First().AddedAt,
+                    IsFavorite = c.First().IsFavorite
                 })
-                .Take(25)
+                .OrderBy(_ => Guid.NewGuid())
+                .Take(20)
                 .ToListAsync();
-
-            cards = [..cards.DistinctBy(c => c.EnWord).Take(20)];
         }
         
         switch (requestModel)

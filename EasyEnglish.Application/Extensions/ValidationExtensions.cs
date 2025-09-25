@@ -44,7 +44,7 @@ internal static class ValidationExtensions
     /// Выкидывает ошибку, если выражение неверное
     /// </summary>
     /// <param name="condition">Выражение</param>
-    /// <param name="message"></param>
+    /// <param name="message">Сообщение ошибки</param>
     public static void ThrowIfInvalidCondition(this bool condition, string message)
     {
         if (!condition)
@@ -59,5 +59,16 @@ internal static class ValidationExtensions
     {
         if (!condition)
             throw new AccessDeniedException();
+    }
+    
+    /// <summary>
+    /// Выкидывает ошибку для подтверждения действия
+    /// </summary>
+    /// <param name="condition">Выражение</param>
+    /// <param name="message">Сообщение ошибки</param>
+    public static void ThrowConfirmActionIfInvalidCondition(this bool condition, string message)
+    {
+        if (!condition)
+            throw new ConfirmActionException(message);
     }
 }

@@ -14,6 +14,18 @@
                       Class="mb-2" Immediate
                       OnKeyDown="HandleKeyDown"
                       @ref="newEnWordTextField" />
+        
+        @if (confirmText.IsNotEmpty())
+        {
+            <MudStack Row AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Warning"
+                         Color="Color.Warning" />
+                
+                <MudText Color="Color.Warning" Typo="Typo.body1" Class="mt-1 mb-2">
+                    @confirmText
+                </MudText>
+            </MudStack>
+        }
 
         <MudStack Row AlignItems="AlignItems.Center">
             <MudButton OnClick="UnsetAndClearUpdateMode"
@@ -28,7 +40,7 @@
                        Disabled="IsSaveButtonDisabled"
                        Color="Color.Primary" Class="mt-1"
                        Variant="Variant.Filled">
-                Сохранить
+                @(isConfirmAction ? "Подтвердить" : "Сохранить")
             </MudButton>
         </MudStack>
                 

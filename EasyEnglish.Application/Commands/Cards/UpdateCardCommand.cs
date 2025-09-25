@@ -33,10 +33,26 @@ public class UpdateCardCommand(
             .ThrowAccessIfInvalidCondition();
         
         var existsCard = await cardRepository
+            .AsNoTracking()
             .SingleOrDefaultAsync(c => c.CardCollectionId == card.CardCollectionId &&
                                        c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower());
+
+        (existsCard is null || existsCard.Id == card.Id)
+            .ThrowIfInvalidCondition("Карточка с таким словом уже существует в этой коллекции");
         
-        existsCard.ThrowIfNotNull("Карточка с таким словом уже существует в этой коллекции");
+        if (!requestModel.IsConfirmAction)
+        {
+            var existsCardsByRuWord = await cardRepository
+                .AsNoTracking()
+                .Include(c => c.CardCollection)
+                .Where(c => c.CardCollection.UserId == userInfoProvider.Id &&
+                                          c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower())
+                .ToListAsync();
+            
+            if (existsCardsByRuWord.Count > 0)
+                string.Equals(card.RuWord, requestModel.RuWord, StringComparison.CurrentCultureIgnoreCase)
+                    .ThrowConfirmActionIfInvalidCondition(GetConfirmText(existsCardsByRuWord));
+        }
 
         var oldRuWord = card.RuWord;
         var oldEnWord = card.EnWord;
@@ -49,4 +65,18 @@ public class UpdateCardCommand(
         logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord} пользователем с Email: {UserEmail} (Id: {UserId})",
             oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email, userInfoProvider.Id);
     }
+
+    #region Private Methods
+
+    private static string GetConfirmText(List<Card> cards)
+    {
+        if (cards.Count > 1)
+            return "В других коллекциях уже есть такое слово. Вы хотите добавить слово в эту коллекцию?";
+        
+        var card = cards.First();
+
+        return $"В коллекции '{card.CardCollection.Title}' уже есть такое слово с переводом '{card.EnWord}'. Вы хотите добавить слово в эту коллекцию?";
+    }
+
+    #endregion
 }

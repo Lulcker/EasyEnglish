@@ -38,6 +38,19 @@ public class CreateCardCommand(
                                        c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower());
         
         card.ThrowIfNotNull("Карточка с таким словом уже существует в этой коллекции");
+        
+        if (!requestModel.IsConfirmAction)
+        {
+            var existsCardsByRuWord = await cardRepository
+                .AsNoTracking()
+                .Include(c => c.CardCollection)
+                .Where(c => c.CardCollection.UserId == userInfoProvider.Id &&
+                            c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower())
+                .ToListAsync();
+            
+            if (existsCardsByRuWord.Count > 0)
+                false.ThrowConfirmActionIfInvalidCondition(GetConfirmText(existsCardsByRuWord));
+        }
 
         card = new Card
         {
@@ -53,4 +66,18 @@ public class CreateCardCommand(
         logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}  пользователем с Email: {UserEmail} (Id: {UserId})",
             card.RuWord, card.EnWord, cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);
     }
+    
+    #region Private Methods
+
+    private static string GetConfirmText(List<Card> cards)
+    {
+        if (cards.Count > 1)
+            return "В других коллекциях уже есть такое слово. Вы хотите добавить слово в эту коллекцию?";
+        
+        var card = cards.First();
+
+        return $"В коллекции '{card.CardCollection.Title}' уже есть такое слово с переводом '{card.EnWord}'. Вы хотите добавить слово в эту коллекцию?";
+    }
+
+    #endregion
 }

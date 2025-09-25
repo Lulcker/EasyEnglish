@@ -28,6 +28,10 @@ internal class GlobalExceptionHandler
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.WritePlainToResponse(exception.Message);
                 break;
+            case ConfirmActionException:
+                context.Response.StatusCode = StatusCodes.Status409Conflict;
+                await context.WritePlainToResponse(exception.Message);
+                break;
             // неожиданное исключение
             default:
                 logger.LogError(exception, "Произошла необработанная ошибка: {Error}", exception.Message);

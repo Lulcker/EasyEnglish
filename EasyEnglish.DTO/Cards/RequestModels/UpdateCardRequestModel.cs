@@ -19,4 +19,9 @@ public class UpdateCardRequestModel
     /// Слово на английском
     /// </summary>
     public required string EnWord { get; init; }
+    
+    /// <summary>
+    /// Подтверждение действия
+    /// </summary>
+    public required bool IsConfirmAction { get; init; }
 }

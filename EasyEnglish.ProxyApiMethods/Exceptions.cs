@@ -11,6 +11,11 @@ public class BusinessException(string message) : Exception(message);
 public class AccessDeniedException(string message) : Exception(message);
 
 /// <summary>
+/// Ошибка для подтверждения действия
+/// </summary>
+public class ConfirmActionException(string message) : Exception(message);
+
+/// <summary>
 /// Внутренняя ошибка сервера
 /// </summary>
 public class InternalServerErrorException(string message) : Exception(message);

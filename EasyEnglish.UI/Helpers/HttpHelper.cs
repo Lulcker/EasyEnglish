@@ -111,10 +111,12 @@ public class HttpHelper(
                 throw new AccessDeniedException("Доступ запрещён");
             case HttpStatusCode.BadRequest:
                 throw new BusinessException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!.Error);
+            case HttpStatusCode.Conflict:
+                throw new ConfirmActionException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!.Error);
             case HttpStatusCode.InternalServerError:
                 throw new InternalServerErrorException("Внутренняя ошибка сервера");
             case HttpStatusCode.Unauthorized:
-                //await userSession.EndSession();
+                await userSession.EndSession();
                 break;
             default:
                 throw new BusinessException("Произошла неожиданная ошибка");
