@@ -20,6 +20,7 @@ public class CardController(
     CreateCardCommand createCardCommand,
     UpdateCardCommand updateCardCommand,
     ToggleCardFavoriteCommand toggleCardFavoriteCommand,
+    MoveCardCommand moveCardCommand,
     DeleteCardCommand deleteCardCommand
     ) : ControllerBase
 {
@@ -87,6 +88,17 @@ public class CardController(
     public async Task<IActionResult> ToggleFavoriteAsync([FromRoute] Guid cardId)
     {
         await toggleCardFavoriteCommand.ExecuteAsync(cardId);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Перемещение карточки в другую коллекцию
+    /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    [HttpPatch("move")]
+    public async Task<IActionResult> MoveAsync([FromBody] MoveCardRequestModel requestModel)
+    {
+        await moveCardCommand.ExecuteAsync(requestModel);
         return Ok();
     }
 

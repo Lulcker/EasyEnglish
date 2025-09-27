@@ -4,6 +4,7 @@ using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
+using EasyEnglish.UI.Dialogs;
 using EasyEnglish.UI.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -60,6 +61,8 @@ public partial class CardCollectionPage(
     
     private MudTextField<string> newEnWordTextField = null!;
 
+    private CardCollectionSelectDialog cardCollectionSelectDialog = null!;
+
     #endregion
     
     #region Properties
@@ -107,6 +110,9 @@ public partial class CardCollectionPage(
         isAddedMode = false;
         isConfirmAction = false;
     }
+
+    private async Task MoveCardAsync(Guid cardId) =>
+        await cardCollectionSelectDialog.OpenAsync(cardId, CardCollectionId);
 
     private async Task SaveAsync()
     {

@@ -25,7 +25,7 @@ public class Card : EntityBase
     /// <summary>
     /// Id коллекции карточек
     /// </summary>
-    public required Guid CardCollectionId { get; init; }
+    public required Guid CardCollectionId { get; set; }
 
     /// <summary>
     /// Коллекция карточек

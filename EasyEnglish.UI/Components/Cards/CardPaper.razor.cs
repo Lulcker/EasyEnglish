@@ -27,6 +27,12 @@ public partial class CardPaper(
     public required CardResponseModel Card { get; set; }
     
     /// <summary>
+    /// Вызывается при нажатии на кнопку Переместить
+    /// </summary>
+    [Parameter]
+    public EventCallback<Guid> OnMove { get; set; }
+    
+    /// <summary>
     /// Только для чтения
     /// </summary>
     [Parameter]
@@ -125,6 +131,9 @@ public partial class CardPaper(
         }
     }
 
+    private async Task MoveAsync() =>
+        await OnMove.InvokeAsync(Card.Id);
+    
     private async Task DeleteAsync()
     {
         if (!await snackbarHelper.ShowConfirm("Вы уверены, что хотите удалить карточку?"))

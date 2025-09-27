@@ -100,5 +100,9 @@ else
 @foreach (var card in cards)
 {
     <CardPaper Card="card"
+               OnMove="MoveCardAsync"
                OnSave="LoadCardsAsync"/>
 }
+
+<CardCollectionSelectDialog @ref="cardCollectionSelectDialog" 
+                            AfterSave="LoadCardsAsync" />

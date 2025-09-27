@@ -13,7 +13,7 @@
         </div>
     }
     
-    @if (isDataLoading)
+    if (isDataLoading)
     {
         <MudStack AlignItems="AlignItems.Center" Class="mb-3" >
             <MudProgressCircular Color="Color.Primary" Indeterminate="isDataLoading" />
