@@ -149,6 +149,7 @@ public partial class TestPage(
         
         timer?.Dispose();
         timer = null;
+        timeLeft = 0;
 
         if (!manually)
             _ = snackbarHelper.ShowWarningMessageBox(message);

@@ -139,9 +139,9 @@ public partial class CardLevelOnePaper(
     
     private async Task ToggleFavoriteAsync()
     {
-        await cardApiHelper.ToggleFavoriteAsync(Card.Id);
-
         Card.IsFavorite = !Card.IsFavorite;
+        
+        await cardApiHelper.ToggleFavoriteAsync(Card.Id);
 
         if (Card.IsFavorite)
             await snackbarHelper.ShowSuccess("Карточка добавлена в избранное");
