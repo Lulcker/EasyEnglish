@@ -9,7 +9,6 @@ internal static class LoggingConfigurator
     {
         builder.Services.AddLogging(cfg =>
         {
-            cfg.AddSeq(builder.Configuration.GetSection("Seq"));
             cfg.AddFilter("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware", LogLevel.None);
         });
         

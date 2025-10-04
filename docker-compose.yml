@@ -19,23 +19,36 @@ services:
       resources:
         limits:
           memory: 256m
-  
-  seq:
-    image: datalust/seq:latest
-    container_name: seq
-    environment:
-      ACCEPT_EULA: Y
-      SEQ_FIRSTRUN_ADMINUSERNAME: ${SEQ_FIRSTRUN_ADMINUSERNAME}
-      SEQ_FIRSTRUN_ADMINPASSWORD: ${SEQ_FIRSTRUN_ADMINPASSWORD}
-      SEQ_STORAGE__MAXIMUMSIZEGB: 1
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
     volumes:
-      - seqdata:/data
-    restart: always
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - dev
     ports:
-      - "5341:5341"
-      - "5342:80"
+      - "9090:9090"
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - grafana-data:/var/lib/grafana
+    networks:
+      - dev
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
     deploy:
       resources:
         limits:
@@ -57,8 +70,6 @@ services:
       Email__Port: ${EMAIL_PORT}
       Email__EmailTo: ${EMAIL_TO}
       Email__Password: ${EMAIL_PASSWORD}
-      Seq__ServerUrl: ${SEQ_SERVER_URL}
-      Seq__ApiKey: ${SEQ_API_KEY}
     depends_on:
       - db
     ports:
@@ -88,8 +99,8 @@ services:
 
 volumes:
   pgdata:
-  seqdata:
-  
+  grafana-data:
+
 networks:
   dev:
     driver: bridge

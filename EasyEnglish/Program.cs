@@ -3,6 +3,7 @@ using EasyEnglish.Filters;
 using EasyEnglish.Handlers;
 using EasyEnglish.Middlewares;
 using Hangfire;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +31,15 @@ app.UseCors("CorsPolicy");
 
 app.UseExceptionHandler(error => error.Run(GlobalExceptionHandler.Handle));
 
+app.UseRouting();
+app.UseHttpMetrics();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseUserInfo();
+
+app.MapMetrics();
 
 app.MapControllers();
 
