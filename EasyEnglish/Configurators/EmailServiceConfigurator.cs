@@ -9,22 +9,26 @@ internal static class EmailServiceConfigurator
 {
     internal static WebApplicationBuilder ConfigureEmailService(this WebApplicationBuilder builder)
     {
-        var host = builder.Configuration.GetValue<string>("Email:Host") ??
-                     throw new ArgumentNullException(nameof(builder));
+        var host = builder.Configuration.GetValue<string>("Email:Host");
         
-        var port = builder.Configuration.GetValue<int?>("Email:Port") ??
-                     throw new ArgumentNullException(nameof(builder));
+        ArgumentException.ThrowIfNullOrWhiteSpace(host);
         
-        var emailTo = builder.Configuration.GetValue<string>("Email:EmailTo") ??
-                     throw new ArgumentNullException(nameof(builder));
+        var port = builder.Configuration.GetValue<int?>("Email:Port");
         
-        var password = builder.Configuration.GetValue<string>("Email:Password") ??
-                     throw new ArgumentNullException(nameof(builder));
+        ArgumentNullException.ThrowIfNull(port);
+        
+        var emailTo = builder.Configuration.GetValue<string>("Email:EmailTo");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(emailTo);
+        
+        var password = builder.Configuration.GetValue<string>("Email:Password");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
         
         builder.Services.AddSingleton<IEmailProvider>(_ => new EmailProvider
         {
             Host = host,
-            Port = port,
+            Port = port.Value,
             EmailTo = emailTo,
             Password = password
         });

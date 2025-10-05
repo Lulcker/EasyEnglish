@@ -10,11 +10,13 @@ internal static class AesCryptoConfigurator
 {
     internal static WebApplicationBuilder ConfigureAesCrypto(this WebApplicationBuilder builder)
     {
-        var key = builder.Configuration.GetValue<string>("Aes:Key") ??
-                     throw new ArgumentNullException(nameof(builder));
+        var key = builder.Configuration.GetValue<string>("Aes:Key");
         
-        var iv = builder.Configuration.GetValue<string>("Aes:IV") ??
-                 throw new ArgumentNullException(nameof(builder));
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        
+        var iv = builder.Configuration.GetValue<string>("Aes:IV");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(iv);
         
         builder.Services.AddSingleton<IAesCryptoProvider>(_ => new AesCryptoProvider
         {

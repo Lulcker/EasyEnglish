@@ -7,8 +7,12 @@ internal static class DatabaseConfigurator
 {
     internal static WebApplicationBuilder ConfigureDatabase(this WebApplicationBuilder builder)
     {
+        var postgresConnection = builder.Configuration.GetConnectionString("Postgres");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(postgresConnection);
+        
         builder.Services.AddDbContext<EasyEnglishDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+            options.UseNpgsql(postgresConnection));
         
         return builder;
     }

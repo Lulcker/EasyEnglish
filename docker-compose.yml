@@ -35,6 +35,20 @@ services:
         limits:
           memory: 128m
 
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - dev
+    ports:
+      - "3100:3100"
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -70,6 +84,7 @@ services:
       Email__Port: ${EMAIL_PORT}
       Email__EmailTo: ${EMAIL_TO}
       Email__Password: ${EMAIL_PASSWORD}
+      Loki__Uri: ${LOKI_URI}
     depends_on:
       - db
     ports:

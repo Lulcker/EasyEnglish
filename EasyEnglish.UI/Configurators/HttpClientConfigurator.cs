@@ -12,8 +12,9 @@ internal static class HttpClientConfigurator
 #if DEBUG
         const string apiUrl = "https://localhost:7046/";
 #else
-        var apiUrl = builder.Configuration.GetValue<string>("ApiBaseUrl") 
-                     ?? throw new ArgumentNullException("ApiBaseUrl");
+        var apiUrl = builder.Configuration.GetValue<string>("ApiBaseUrl");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(apiUrl);
 #endif
         
         builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(apiUrl) });

@@ -14,8 +14,9 @@ internal static class CorsConfigurator
 #if DEBUG
         const string webUrl = "https://localhost:7216";
 #else
-            var webUrl = builder.Configuration.GetValue<string>("WebBaseUrl") 
-                         ?? throw new ArgumentNullException(nameof(builder));
+        var webUrl = builder.Configuration.GetValue<string>("WebBaseUrl");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(webUrl);
 #endif
         
         builder.Services.AddCors(options =>

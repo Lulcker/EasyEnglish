@@ -10,8 +10,9 @@ internal static class HashConfigurator
 {
     internal static WebApplicationBuilder ConfigureHash(this WebApplicationBuilder builder)
     {
-        var pepper = builder.Configuration.GetValue<string>("Hash:Pepper") ??
-                     throw new ArgumentNullException(nameof(builder));
+        var pepper = builder.Configuration.GetValue<string>("Hash:Pepper");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(pepper);
         
         builder.Services.AddSingleton<IHashProvider>(_ => new HashProvider
         {

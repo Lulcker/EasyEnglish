@@ -10,14 +10,17 @@ internal static class AuthConfigurator
 {
     internal static WebApplicationBuilder ConfigureAuth(this WebApplicationBuilder builder)
     {
-        var key = builder.Configuration.GetValue<string>("Auth:Key") 
-                  ?? throw new ArgumentNullException(nameof(builder));
+        var key = builder.Configuration.GetValue<string>("Auth:Key");
         
-        var issuer = builder.Configuration.GetValue<string>("Auth:Issuer") 
-                     ?? throw new ArgumentNullException(nameof(builder));
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
         
-        var audience = builder.Configuration.GetValue<string>("Auth:Audience") 
-                       ?? throw new ArgumentNullException(nameof(builder));
+        var issuer = builder.Configuration.GetValue<string>("Auth:Issuer");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(issuer);
+        
+        var audience = builder.Configuration.GetValue<string>("Auth:Audience");
+        
+        ArgumentException.ThrowIfNullOrWhiteSpace(audience);
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -31,7 +34,7 @@ internal static class AuthConfigurator
                     ValidAudience = audience,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = true
                 };
             });
 

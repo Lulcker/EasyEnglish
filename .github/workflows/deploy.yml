@@ -70,6 +70,7 @@ jobs:
             EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
             GRAFANA_USER=${{ secrets.GRAFANA_USER }}
             GRAFANA_PASSWORD=${{ secrets.GRAFANA_PASSWORD }}
+            LOKI_URI=${{ secrets.LOKI_URI }}
             EOL
             
             docker-compose pull
