@@ -1,73 +1,6 @@
 ﻿version: '3.9'
 
 services:
-  db:
-    image: postgres:15
-    container_name: postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    restart: always
-    networks:
-      - dev
-    ports:
-      - "5432:5432"
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: unless-stopped
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - dev
-    ports:
-      - "9090:9090"
-    deploy:
-      resources:
-        limits:
-          memory: 128m
-
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    restart: unless-stopped
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - dev
-    ports:
-      - "3100:3100"
-    deploy:
-      resources:
-        limits:
-          memory: 128m
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    restart: unless-stopped
-    volumes:
-      - ./grafana.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
-      - grafana-data:/var/lib/grafana
-    networks:
-      - dev
-    ports:
-      - "3000:3000"
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-
   api:
     image: ${DOCKER_USERNAME}/easy-english-api
     container_name: easy_english_api
@@ -111,10 +44,6 @@ services:
       resources:
         limits:
           memory: 128m
-
-volumes:
-  pgdata:
-  grafana-data:
 
 networks:
   dev:
