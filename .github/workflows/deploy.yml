@@ -68,6 +68,6 @@ jobs:
             LOKI_URI=${{ secrets.LOKI_URI }}
             EOL
             
-            docker-compose pull
-            docker-compose up -d --remove-orphans
+            docker compose pull
+            docker compose up -d --remove-orphans
             docker image prune -a
