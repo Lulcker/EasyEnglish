@@ -18,20 +18,30 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build and push backend
-        run: |
-          IMAGE=${{ secrets.DOCKER_USERNAME }}/easy-english-api
-          GIT_SHA=${{ github.sha }}
-          docker build -t $IMAGE:latest -t $IMAGE:$GIT_SHA -f EasyEnglish/Dockerfile .
-          docker push $IMAGE:latest
-          docker push $IMAGE:$GIT_SHA
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: EasyEnglish/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/easy-english-api:latest
+            ${{ secrets.DOCKER_USERNAME }}/easy-english-api:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and push frontend
-        run: |
-          IMAGE=${{ secrets.DOCKER_USERNAME }}/easy-english-ui
-          GIT_SHA=${{ github.sha }}
-          docker build -t $IMAGE:latest -t $IMAGE:$GIT_SHA -f EasyEnglish.UI/Dockerfile --build-arg API_BASE_URL=${{ secrets.API_BASE_URL }} .
-          docker push $IMAGE:latest
-          docker push $IMAGE:$GIT_SHA
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: EasyEnglish.UI/Dockerfile
+          push: true
+          build-args: |
+            API_BASE_URL=${{ secrets.API_BASE_URL }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/easy-english-ui:latest
+            ${{ secrets.DOCKER_USERNAME }}/easy-english-ui:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v1.0.0
