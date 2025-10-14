@@ -16,7 +16,7 @@ public partial class TestPage(
     CardCollectionApiHelper cardCollectionApiHelper,
     ISnackbarHelper snackbarHelper,
     IBreadcrumbHelper breadcrumbHelper
-    ) : ComponentBase
+    ) : ComponentBase, IAsyncDisposable
 {
     #region Parameters
 
@@ -57,7 +57,7 @@ public partial class TestPage(
     private bool IsStartButtonDisabled => !useAnswerChoice && !useAnswerWriting;
     
     #endregion
-    
+
     #region Methods
 
     protected override async Task OnInitializedAsync()
@@ -104,8 +104,6 @@ public partial class TestPage(
         isTestFinished = false;
         
         await LoadDataAsync();
-        
-        timer?.Dispose();
         
         timeLeft = cards.Sum(x => x.Level is CardLevel.One ? 5 : 10);
         timer = new Timer(Tick, null, 1000, 1000);
@@ -185,6 +183,14 @@ public partial class TestPage(
     
     private static string FormatTime(int seconds) => 
         TimeSpan.FromSeconds(seconds).ToString(@"mm\:ss");
+    
+    public async ValueTask DisposeAsync()
+    {
+        if (timer is not null)
+            await timer.DisposeAsync();
+        
+        GC.SuppressFinalize(this);
+    }
     
     #endregion
 }
