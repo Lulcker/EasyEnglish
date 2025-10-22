@@ -128,6 +128,7 @@ public partial class TestPage(
         cards = [];
 
         countRightAnswer = 0;
+        countWrongAnswer = 0;
     }
     
     private void Tick(object? state)
