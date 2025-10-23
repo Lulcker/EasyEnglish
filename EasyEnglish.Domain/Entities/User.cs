@@ -30,7 +30,7 @@ public class User : EntityBase
     /// <summary>
     /// Коллекции карточек
     /// </summary>
-    public ICollection<CardCollection> CardCollections { get; set; } = new HashSet<CardCollection>();
+    public ICollection<CardCollection> CardCollections { get; init; } = new HashSet<CardCollection>();
 
     /// <summary>
     /// Настройки напоминаний

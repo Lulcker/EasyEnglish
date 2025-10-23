@@ -7,34 +7,31 @@ using Microsoft.Extensions.Logging;
 namespace EasyEnglish.Application.Commands.CardCollections;
 
 /// <summary>
-/// Команда удаления коллекции карточек
+/// Команда изменения выученности коллекции
 /// </summary>
-public class DeleteCardCollectionCommand(
-    IRepository<Card> cardRepository,
+public class ToggleCardCollectionLearnedCommand(
     IRepository<CardCollection> cardCollectionRepository,
     IUnitOfWork unitOfWork,
     IUserInfoProvider userInfoProvider,
-    ILogger<DeleteCardCollectionCommand> logger
+    ILogger<ToggleCardCollectionLearnedCommand> logger
     )
 {
     public async Task ExecuteAsync(Guid cardCollectionId)
     {
         var cardCollection = await cardCollectionRepository
-            .Include(c => c.Cards)
             .SingleOrDefaultAsync(c => c.Id == cardCollectionId);
-        
+
         cardCollection.ThrowIfNull("Коллекция не найдена");
-        
+
         (cardCollection.UserId == userInfoProvider.Id)
             .ThrowAccessIfInvalidCondition();
-        
-        if (cardCollection.Cards.Count > 0)
-            cardRepository.RemoveRange(cardCollection.Cards);
-        
-        cardCollectionRepository.Remove(cardCollection);
+
+        cardCollection.IsLearned = !cardCollection.IsLearned;
+
         await unitOfWork.SaveChangesAsync();
-        
-        logger.LogInformation("Удалена коллекция {CardCollectionTitle} пользователем с Email: {UserEmail} (Id: {UserId})",
-            cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);
+
+        logger.LogInformation(
+            "Изменено свойство IsLearned у коллекции с Id: {CardCollectionId}. Новое значение: {IsLearned}. Пользователь: {UserEmail} (Id: {UserId})",
+            cardCollectionId, cardCollection.IsLearned, userInfoProvider.Email, userInfoProvider.Id);
     }
 }

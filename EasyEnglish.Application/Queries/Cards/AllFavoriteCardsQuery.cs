@@ -12,7 +12,7 @@ namespace EasyEnglish.Application.Queries.Cards;
 public class AllFavoriteCardsQuery(
     IRepository<Card> cardRepository,
     IUserInfoProvider userInfoProvider
-)
+    )
 {
     public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync()
     {

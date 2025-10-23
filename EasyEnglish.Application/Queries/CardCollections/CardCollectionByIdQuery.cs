@@ -31,7 +31,8 @@ public class CardCollectionByIdQuery(
             Id = cardCollection.Id,
             Title = cardCollection.Title,
             CreatedAt = cardCollection.CreatedAt,
-            CardsCount = cardCollection.Cards.Count,
+            IsLearned = cardCollection.IsLearned,
+            CardsCount = cardCollection.Cards.Count
         };
     }
 }

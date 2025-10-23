@@ -60,6 +60,23 @@ public partial class CardCollectionPaper(
         newTitle = string.Empty;
     }
 
+    private async Task ToggleLearnedAsync()
+    {
+        isLoading = true;
+
+        try
+        {
+            await cardCollectionApiHelper.ToggleLearnedAsync(CardCollection.Id);
+
+            CardCollection.IsLearned = !CardCollection.IsLearned;
+        }
+        finally
+        {
+            isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
     private async Task SaveAsync()
     {
         if (IsSaveButtonDisabled)

@@ -16,7 +16,7 @@ public class CreateCardCommand(
     IUnitOfWork unitOfWork,
     IUserInfoProvider userInfoProvider,
     ILogger<CreateCardCommand> logger
-)
+    )
 {
     public async Task ExecuteAsync(CreateCardRequestModel requestModel)
     {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace EasyEnglish.Application.Commands.Cards;
 
 /// <summary>
-/// Изменение избранности карточки
+/// Команда изменения избранности карточки
 /// </summary>
 public class ToggleCardFavoriteCommand(
     IRepository<Card> cardRepository,
@@ -20,7 +20,7 @@ public class ToggleCardFavoriteCommand(
     {
         var card = await cardRepository
             .Include(c => c.CardCollection)
-            .FirstOrDefaultAsync(c => c.Id == cardId);
+            .SingleOrDefaultAsync(c => c.Id == cardId);
         
         card.ThrowIfNull("Карточка не найдена");
         

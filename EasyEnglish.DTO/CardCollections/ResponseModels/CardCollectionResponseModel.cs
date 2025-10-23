@@ -21,6 +21,11 @@ public class CardCollectionResponseModel
     public required DateTime CreatedAt { get; init; }
     
     /// <summary>
+    /// Коллекция выучена?
+    /// </summary>
+    public required bool IsLearned { get; set; }
+    
+    /// <summary>
     /// Количество карточек
     /// </summary>
     public required int CardsCount { get; init; }

@@ -14,7 +14,7 @@ public class DeleteCardCommand(
     IUnitOfWork unitOfWork,
     IUserInfoProvider userInfoProvider,
     ILogger<DeleteCardCommand> logger
-)
+    )
 {
     public async Task ExecuteAsync(Guid cardId)
     {

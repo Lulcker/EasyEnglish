@@ -50,7 +50,8 @@ public class CardsForTestQuery(
         {
             cards = await cardRepository
                 .AsNoTracking()
-                .Where(c => c.CardCollection.UserId == userInfoProvider.Id)
+                .Where(c => c.CardCollection.UserId == userInfoProvider.Id &&
+                            (!c.CardCollection.IsLearned || c.IsFavorite))
                 .GroupBy(c => c.RuWord)
                 .Select(c => new CardForTestResponseModel
                 {

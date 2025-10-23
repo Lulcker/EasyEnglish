@@ -18,6 +18,7 @@ public class CardCollectionController(
     AllCardCollectionsQuery allCardCollectionsQuery,
     CreateCardCollectionCommand createCardCollectionCommand,
     UpdateCardCollectionCommand updateCardCollectionCommand,
+    ToggleCardCollectionLearnedCommand toggleCardCollectionLearnedCommand,
     DeleteCardCollectionCommand deleteCardCollectionCommand
     ) : ControllerBase
 {
@@ -65,6 +66,17 @@ public class CardCollectionController(
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateCardCollectionRequestModel requestModel)
     {
         await updateCardCollectionCommand.ExecuteAsync(requestModel);
+        return Ok();
+    }
+    
+    /// <summary>
+    /// Изменение избранности карточки
+    /// </summary>
+    /// <param name="cardCollectionId">Id коллекции</param>
+    [HttpPatch("toggle-learned/{cardCollectionId:guid}")]
+    public async Task<IActionResult> ToggleLearnedAsync([FromRoute] Guid cardCollectionId)
+    {
+        await toggleCardCollectionLearnedCommand.ExecuteAsync(cardCollectionId);
         return Ok();
     }
 

@@ -18,6 +18,11 @@ public class CardCollection : EntityBase
     public required DateTime CreatedAt { get; init; }
     
     /// <summary>
+    /// Коллекция выучена?
+    /// </summary>
+    public bool IsLearned { get; set; }
+    
+    /// <summary>
     /// Id пользователя
     /// </summary>
     public required Guid UserId { get; init; }
@@ -30,5 +35,5 @@ public class CardCollection : EntityBase
     /// <summary>
     /// Карточки
     /// </summary>
-    public ICollection<Card> Cards { get; set; } = new HashSet<Card>();
+    public ICollection<Card> Cards { get; init; } = new HashSet<Card>();
 }

@@ -20,7 +20,7 @@ public class UpdateReminderSettingsCommand(
     IUserInfoProvider userInfoProvider,
     IBackgroundJobClient backgroundJobClient,
     ILogger<UpdateReminderSettingsCommand> logger
-)
+    )
 {
     public async Task ExecuteAsync(UpdateReminderSettingsRequestModel requestModel)
     {

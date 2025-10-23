@@ -34,9 +34,15 @@
     else
     {
         <MudStack Spacing="2">
-            <MudText Typo="Typo.h6">
-                @CardCollection.Title
-            </MudText>
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+                <MudText Typo="Typo.h6">
+                    @CardCollection.Title
+                </MudText>
+                @if (CardCollection.IsLearned)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                }
+            </MudStack>
             <MudText>
                 Количество карточек: @CardCollection.CardsCount
             </MudText>
@@ -46,6 +52,11 @@
                 <MudMenuItem OnClick="SetUpdateMode" IconColor="Color.Primary"
                              Icon="@Icons.Material.Filled.Edit">
                     Редактировать
+                </MudMenuItem>
+                <MudMenuItem OnClick="ToggleLearnedAsync" 
+                             IconColor="@(CardCollection.IsLearned ? Color.Error : Color.Success)"
+                             Icon="@(CardCollection.IsLearned ? Icons.Material.Filled.Close : Icons.Material.Filled.Check)">
+                    @(CardCollection.IsLearned ? "Снять отметку \"выучено\"" : "Отметить выученным")
                 </MudMenuItem>
                 <MudMenuItem OnClick="DeleteAsync" IconColor="Color.Error"
                              Icon="@Icons.Material.Filled.Delete">

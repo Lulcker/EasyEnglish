@@ -19,7 +19,7 @@ public class RegistrationUserCommand(
     IAesCryptoService aesCryptoService,
     CreateJwtTokenRule createJwtTokenRule,
     ILogger<LoginUserCommand> logger
-)
+    )
 {
     public async Task<AuthorizeUserResponseModel> ExecuteAsync(RegistrationUserRequestModel requestModel)
     {

@@ -2,9 +2,15 @@
 
 <PageTitle>EasyEnglish | @cardCollection?.Title</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">
-    @cardCollection?.Title @(cards.Count > 0 ? $"[{cards.Count}]" : string.Empty)
-</MudText>
+<MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="mb-4">
+    <MudText Typo="Typo.h5">
+        @cardCollection?.Title @(cards.Count > 0 ? $"[{cards.Count}]" : string.Empty)
+    </MudText>
+    @if (cardCollection?.IsLearned == true)
+    {
+        <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+    }
+</MudStack>
 
 @if (cards.Count == 0 && !isDataLoading)
 {

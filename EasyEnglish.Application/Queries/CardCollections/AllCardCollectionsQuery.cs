@@ -24,6 +24,7 @@ public class AllCardCollectionsQuery(
                 Id = c.Id,
                 Title = c.Title,
                 CreatedAt = c.CreatedAt,
+                IsLearned = c.IsLearned,
                 CardsCount = c.Cards.Count
             })
             .OrderByDescending(c => c.CreatedAt)

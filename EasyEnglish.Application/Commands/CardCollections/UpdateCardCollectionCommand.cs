@@ -15,7 +15,7 @@ public class UpdateCardCollectionCommand(
     IUnitOfWork unitOfWork,
     IUserInfoProvider userInfoProvider,
     ILogger<UpdateCardCollectionCommand> logger
-)
+    )
 {
     public async Task ExecuteAsync(UpdateCardCollectionRequestModel requestModel)
     {
