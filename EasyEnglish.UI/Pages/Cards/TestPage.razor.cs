@@ -32,9 +32,9 @@ public partial class TestPage(
     
     private List<CardForTestResponseModel> cards = [];
 
-    private bool useAnswerChoice = true;
+    private bool useAnswerChoice;
 
-    private bool useAnswerWriting;
+    private bool useAnswerWriting = true;
     
     private bool isTestStarted;
     
