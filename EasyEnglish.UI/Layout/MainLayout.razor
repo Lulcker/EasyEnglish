@@ -15,17 +15,20 @@
                         </MudHidden>
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense
                                  Color="Color.Primary" Class="mr-2">
-                            <MudMenuItem Label="Профиль" OnClick="OpenProfile"
-                                         Icon="@Icons.Material.Filled.Portrait" IconColor="Color.Primary" />
+                            @if (!currentPage.StartsWith("profile"))
+                            {
+                                <MudMenuItem Label="Профиль" OnClick="OpenProfile"
+                                             Icon="@Icons.Material.Filled.Portrait" IconColor="Color.Primary"/>
+                            }
                             @if (!currentPage.StartsWith("favorite-cards"))
                             {
                                 <MudMenuItem Label="Избранные" OnClick="OpenFavoriteCards"
-                                             Icon="@Icons.Material.Outlined.Favorite" IconColor="Color.Error" />   
+                                             Icon="@Icons.Material.Outlined.Favorite" IconColor="Color.Error"/>
                             }
                             @if (!currentPage.StartsWith("test"))
                             {
                                 <MudMenuItem Label="Тест" OnClick="OpenTest"
-                                             Icon="@Icons.Material.Outlined.FactCheck" IconColor="Color.Info" />   
+                                             Icon="@Icons.Material.Outlined.FactCheck" IconColor="Color.Info"/>
                             }
                             <MudMenuItem Label="Выйти" OnClick="LogOutAsync"
                                          Icon="@Icons.Material.Filled.Logout" IconColor="Color.Error"/>

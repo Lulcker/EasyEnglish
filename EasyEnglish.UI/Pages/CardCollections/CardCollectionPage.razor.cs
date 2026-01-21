@@ -1,4 +1,5 @@
-﻿using EasyEnglish.DTO.CardCollections.ResponseModels;
+﻿using System.Text.RegularExpressions;
+using EasyEnglish.DTO.CardCollections.ResponseModels;
 using EasyEnglish.DTO.Cards.RequestModels;
 using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods;
@@ -66,8 +67,16 @@ public partial class CardCollectionPage(
     #endregion
     
     #region Properties
+    
+    private bool NewRuWordIsError => Regex.IsMatch(newRuWord, "[A-Za-z]");
+    
+    private bool NewEnWordIsError => Regex.IsMatch(newEnWord, "[\u0400-\u04FF]");
 
-    private bool IsSaveButtonDisabled => newRuWord.IsEmpty() || newEnWord.IsEmpty() || isAddedLoading;
+    private bool IsSaveButtonDisabled => newRuWord.IsEmpty() ||
+                                         newEnWord.IsEmpty() ||
+                                         NewRuWordIsError ||
+                                         NewEnWordIsError ||
+                                         isAddedLoading;
 
     #endregion
 

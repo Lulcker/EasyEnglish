@@ -57,6 +57,8 @@ else
                       Variant="Variant.Outlined"
                       Class="mb-2" Immediate AutoFocus
                       OnKeyDown="HandleKeyDown"
+                      Error="NewRuWordIsError"
+                      ErrorText="Слово содержит английские символы"
                       @ref="newRuWordTextField" />
 
         <MudTextField Label="Слово на английском"
@@ -64,6 +66,8 @@ else
                       Variant="Variant.Outlined"
                       Class="mb-2" Immediate 
                       OnKeyDown="HandleKeyDown"
+                      Error="NewEnWordIsError"
+                      ErrorText="Слово содержит русские символы"
                       @ref="newEnWordTextField"/>
         
         @if (confirmText.IsNotEmpty())
