@@ -1,7 +1,34 @@
 ﻿@page "/"
 @page "/card-collections"
+@using EasyEnglish.DTO.Cards.ResponseModels
 
 <PageTitle>EasyEnglish | Коллекции</PageTitle>
+
+<MudAutocomplete T="SearchCardResponseModel"
+                 Variant="Variant.Outlined" Dense
+                 Placeholder="Поиск по словам"
+                 AdornmentIcon="@Icons.Material.Filled.Search"
+                 Adornment="Adornment.Start"
+                 AdornmentColor="Color.Primary"
+                 DebounceInterval="350"
+                 SearchFunc="SearchFunc"
+                 ValueChanged="OnItemSelected"
+                 Clearable Class="mb-5" >
+    <ItemTemplate>
+        <MudLink Href="@($"/card-collection/{context.CardCollectionId}")" Underline="Underline.None">
+            <MudText Typo="Typo.body1">
+                <b>@context.EnWord</b>
+                <MudText Typo="Typo.body1" Inline>
+                    → @context.RuWord
+                </MudText>
+            </MudText>
+
+            <MudText Typo="Typo.caption" Color="Color.Dark">
+                Коллекция: <b>@context.CardCollectionTitle</b>
+            </MudText>
+        </MudLink>
+    </ItemTemplate>
+</MudAutocomplete>
 
 <MudText Typo="Typo.h5" Class="mb-4">
     Коллекции карточек

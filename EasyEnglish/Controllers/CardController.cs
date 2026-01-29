@@ -17,6 +17,7 @@ public class CardController(
     AllCardsByCollectionIdQuery allCardsByCollectionIdQuery,
     AllFavoriteCardsQuery allFavoriteCardsQuery,
     CardsForTestQuery cardsForTestQuery,
+    SearchCardsQuery searchCardsQuery,
     CreateCardCommand createCardCommand,
     UpdateCardCommand updateCardCommand,
     ToggleCardFavoriteCommand toggleCardFavoriteCommand,
@@ -41,6 +42,15 @@ public class CardController(
     [HttpGet("all-favorite")]
     public async Task<ActionResult<IReadOnlyCollection<CardResponseModel>>> AllFavoriteAsync() =>
         Ok(await allFavoriteCardsQuery.ExecuteAsync());
+
+    /// <summary>
+    /// Получение карточек в поиске
+    /// </summary>
+    /// <param name="searchText">Текст поиска</param>
+    /// <returns>Список карточек</returns>
+    [HttpGet("search-cards")]
+    public async Task<ActionResult<IReadOnlyCollection<SearchCardResponseModel>>> SearchCardsAsync([FromQuery] string searchText) =>
+        Ok(await searchCardsQuery.ExecuteAsync(searchText));
 
     #endregion
 

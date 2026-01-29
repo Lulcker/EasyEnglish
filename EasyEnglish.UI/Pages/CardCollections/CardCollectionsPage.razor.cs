@@ -1,5 +1,6 @@
 ﻿using EasyEnglish.DTO.CardCollections.RequestModels;
 using EasyEnglish.DTO.CardCollections.ResponseModels;
+using EasyEnglish.DTO.Cards.ResponseModels;
 using EasyEnglish.ProxyApiMethods.ApiMethods;
 using EasyEnglish.UI.Contracts;
 using EasyEnglish.UI.Extensions;
@@ -13,9 +14,11 @@ namespace EasyEnglish.UI.Pages.CardCollections;
 /// Страница коллекций карточек
 /// </summary>
 public partial class CardCollectionsPage(
+    CardApiHelper cardApiHelper,
     CardCollectionApiHelper cardCollectionApiHelper,
     IBreadcrumbHelper breadcrumbHelper,
-    ISnackbarHelper snackbarHelper
+    ISnackbarHelper snackbarHelper,
+    NavigationManager navigationManager
     ) : ComponentBase
 {
     #region Fields
@@ -103,6 +106,17 @@ public partial class CardCollectionsPage(
                 break;
         }
     }
+    
+    private async Task<IEnumerable<SearchCardResponseModel>> SearchFunc(string? searchText, CancellationToken arg2)
+    {
+        if (searchText.IsEmpty())
+            return [];
+
+        return await cardApiHelper.SearchCardsAsync(searchText!);
+    }
+    
+    private void OnItemSelected(SearchCardResponseModel item) =>
+        navigationManager.NavigateTo($"/card-collection/{item.CardCollectionId}");
 
     #endregion
 }
