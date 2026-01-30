@@ -18,12 +18,12 @@ public class CreateCardCollectionCommand(
     ILogger<CreateCardCollectionCommand> logger
     )
 {
-    public async Task<Guid> ExecuteAsync(CreateCardCollectionRequestModel requestModel)
+    public async Task<Guid> ExecuteAsync(CreateCardCollectionRequestModel requestModel, CancellationToken cancellationToken)
     {
         requestModel.Title.ThrowIfEmpty("Название коллекции не должно быть пустым");
 
         var cardCollection = await cardCollectionRepository
-            .SingleOrDefaultAsync(c => c.Title.Trim().ToLower() == requestModel.Title.Trim().ToLower());
+            .SingleOrDefaultAsync(c => c.Title.Trim().ToLower() == requestModel.Title.Trim().ToLower(), cancellationToken);
         
         cardCollection.ThrowIfNotNull("Коллекция с таким названием уже существует");
 
@@ -35,7 +35,7 @@ public class CreateCardCollectionCommand(
         };
 
         cardCollectionRepository.Add(cardCollection);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Создана коллекция {CardCollectionTitle} пользователем с Email: {UserEmail} (Id: {UserId})",
             cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);

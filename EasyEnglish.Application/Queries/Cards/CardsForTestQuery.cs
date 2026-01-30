@@ -17,7 +17,7 @@ public class CardsForTestQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<IReadOnlyCollection<CardForTestResponseModel>> ExecuteAsync(CardForTestRequestModel requestModel)
+    public async Task<IReadOnlyCollection<CardForTestResponseModel>> ExecuteAsync(CardForTestRequestModel requestModel, CancellationToken cancellationToken)
     {
         List<CardForTestResponseModel> cards;
         
@@ -27,7 +27,7 @@ public class CardsForTestQuery(
                 .AsNoTracking()
                 .Where(c => c.Id == requestModel.CardCollectionId.Value)
                 .Select(c => c.UserId)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(cancellationToken);
 
             (cardCollectionUserId == userInfoProvider.Id)
                 .ThrowAccessIfInvalidCondition();
@@ -44,7 +44,7 @@ public class CardsForTestQuery(
                     IsFavorite = c.IsFavorite
                 })
                 .OrderBy(_ => Guid.NewGuid())
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         else
         {
@@ -63,7 +63,7 @@ public class CardsForTestQuery(
                 })
                 .OrderBy(_ => Guid.NewGuid())
                 .Take(20)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         
         switch (requestModel)

@@ -18,7 +18,7 @@ public class CreateCardCommand(
     ILogger<CreateCardCommand> logger
     )
 {
-    public async Task ExecuteAsync(CreateCardRequestModel requestModel)
+    public async Task ExecuteAsync(CreateCardRequestModel requestModel, CancellationToken cancellationToken)
     {
         requestModel.RuWord.ThrowIfEmpty("Не написано русское слово");
         
@@ -26,7 +26,7 @@ public class CreateCardCommand(
         
         var cardCollection = await cardCollectionRepository
             .AsNoTracking()
-            .SingleOrDefaultAsync(c => c.Id == requestModel.CardCollectionId);
+            .SingleOrDefaultAsync(c => c.Id == requestModel.CardCollectionId, cancellationToken);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
         
@@ -35,7 +35,7 @@ public class CreateCardCommand(
 
         var card = await cardRepository
             .SingleOrDefaultAsync(c => c.CardCollectionId == requestModel.CardCollectionId &&
-                                       c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower());
+                                       c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower(), cancellationToken);
         
         card.ThrowIfNotNull("Карточка с таким словом уже существует в этой коллекции");
         
@@ -46,7 +46,7 @@ public class CreateCardCommand(
                 .Include(c => c.CardCollection)
                 .Where(c => c.CardCollection.UserId == userInfoProvider.Id &&
                             c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower())
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             
             if (existsCardsByRuWord.Count > 0)
                 false.ThrowConfirmActionIfInvalidCondition(GetConfirmText(existsCardsByRuWord));
@@ -61,7 +61,7 @@ public class CreateCardCommand(
         };
         
         cardRepository.Add(card);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Добавлена карточка {RuWord} - {EnWord} в коллекцию {CardCollectionTitle}  пользователем с Email: {UserEmail} (Id: {UserId})",
             card.RuWord, card.EnWord, cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);

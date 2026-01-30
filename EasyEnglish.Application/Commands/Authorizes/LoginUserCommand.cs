@@ -20,7 +20,7 @@ public class LoginUserCommand(
     ILogger<LoginUserCommand> logger
     )
 {
-    public async Task<AuthorizeUserResponseModel> ExecuteAsync(LoginUserRequestModel requestModel)
+    public async Task<AuthorizeUserResponseModel> ExecuteAsync(LoginUserRequestModel requestModel, CancellationToken cancellationToken)
     {
         var email = requestModel.Email.Trim().ToLower();
         
@@ -32,14 +32,14 @@ public class LoginUserCommand(
         
         var user = await userRepository
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == aesCryptoService.Encrypt(email));
+            .FirstOrDefaultAsync(u => u.Email == aesCryptoService.Encrypt(email),cancellationToken);
         
         user.ThrowIfNull("Пользователь с такой почтой не найден");
         
         user = await userRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == aesCryptoService.Encrypt(email) &&
-                                      u.PasswordHash == hashService.GenerateHash(requestModel.Password, user.PasswordSalt));
+                                      u.PasswordHash == hashService.GenerateHash(requestModel.Password, user.PasswordSalt), cancellationToken);
         
         user.ThrowIfNull("Неверный пароль");
         

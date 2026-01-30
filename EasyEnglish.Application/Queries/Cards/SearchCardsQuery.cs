@@ -14,7 +14,7 @@ public class SearchCardsQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<IReadOnlyCollection<SearchCardResponseModel>> ExecuteAsync(string searchText)
+    public async Task<IReadOnlyCollection<SearchCardResponseModel>> ExecuteAsync(string searchText, CancellationToken cancellationToken)
     {
         var query = cardRepository
             .AsNoTracking()
@@ -34,6 +34,6 @@ public class SearchCardsQuery(
                 CardCollectionTitle = c.CardCollection.Title
             })
             .Take(5)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

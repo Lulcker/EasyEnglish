@@ -16,10 +16,10 @@ public class ToggleCardCollectionLearnedCommand(
     ILogger<ToggleCardCollectionLearnedCommand> logger
     )
 {
-    public async Task ExecuteAsync(Guid cardCollectionId)
+    public async Task ExecuteAsync(Guid cardCollectionId, CancellationToken cancellationToken)
     {
         var cardCollection = await cardCollectionRepository
-            .SingleOrDefaultAsync(c => c.Id == cardCollectionId);
+            .SingleOrDefaultAsync(c => c.Id == cardCollectionId, cancellationToken);
 
         cardCollection.ThrowIfNull("Коллекция не найдена");
 
@@ -28,7 +28,7 @@ public class ToggleCardCollectionLearnedCommand(
 
         cardCollection.IsLearned = !cardCollection.IsLearned;
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Изменено свойство IsLearned у коллекции с Id: {CardCollectionId}. Новое значение: {IsLearned}. Пользователь: {UserEmail} (Id: {UserId})",

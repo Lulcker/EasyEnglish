@@ -17,11 +17,11 @@ public class DeleteCardCollectionCommand(
     ILogger<DeleteCardCollectionCommand> logger
     )
 {
-    public async Task ExecuteAsync(Guid cardCollectionId)
+    public async Task ExecuteAsync(Guid cardCollectionId, CancellationToken cancellationToken)
     {
         var cardCollection = await cardCollectionRepository
             .Include(c => c.Cards)
-            .SingleOrDefaultAsync(c => c.Id == cardCollectionId);
+            .SingleOrDefaultAsync(c => c.Id == cardCollectionId, cancellationToken);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
         
@@ -32,7 +32,7 @@ public class DeleteCardCollectionCommand(
             cardRepository.RemoveRange(cardCollection.Cards);
         
         cardCollectionRepository.Remove(cardCollection);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Удалена коллекция {CardCollectionTitle} пользователем с Email: {UserEmail} (Id: {UserId})",
             cardCollection.Title, userInfoProvider.Email, userInfoProvider.Id);

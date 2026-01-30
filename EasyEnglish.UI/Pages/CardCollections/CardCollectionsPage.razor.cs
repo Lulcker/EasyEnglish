@@ -107,12 +107,12 @@ public partial class CardCollectionsPage(
         }
     }
     
-    private async Task<IEnumerable<SearchCardResponseModel>> SearchFunc(string? searchText, CancellationToken arg2)
+    private async Task<IEnumerable<SearchCardResponseModel>> SearchFunc(string? searchText, CancellationToken cancellationToken)
     {
         if (searchText.IsEmpty())
             return [];
 
-        return await cardApiHelper.SearchCardsAsync(searchText!);
+        return await cardApiHelper.SearchCardsAsync(searchText!, cancellationToken);
     }
     
     private void OnItemSelected(SearchCardResponseModel item) =>

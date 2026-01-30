@@ -14,7 +14,7 @@ public class GetReminderSettingsQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<ReminderSettingsResponseModel?> ExecuteAsync()
+    public async Task<ReminderSettingsResponseModel?> ExecuteAsync(CancellationToken cancellationToken)
     {
         var user = await userRepository
             .AsNoTracking()
@@ -23,7 +23,7 @@ public class GetReminderSettingsQuery(
             {
                 u.ReminderSettings
             })
-            .SingleAsync();
+            .SingleAsync(cancellationToken);
 
         if (user.ReminderSettings is null)
             return null;

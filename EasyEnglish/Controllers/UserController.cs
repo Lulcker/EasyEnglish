@@ -25,9 +25,10 @@ public class UserController(
     /// <summary>
     /// Получение настроек напоминаний
     /// </summary>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpGet("reminder-settings")]
-    public async Task<ActionResult<ReminderSettingsResponseModel>> GetReminderSettingsAsync() =>
-        Ok(await getReminderSettingsQuery.ExecuteAsync());
+    public async Task<ActionResult<ReminderSettingsResponseModel>> GetReminderSettingsAsync(CancellationToken cancellationToken) =>
+        Ok(await getReminderSettingsQuery.ExecuteAsync(cancellationToken));
 
     #endregion
     
@@ -36,10 +37,13 @@ public class UserController(
     /// <summary>
     /// Установка настроек напоминаний
     /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("set-reminder-settings")]
-    public async Task<IActionResult> SetReminderSettingsAsync([FromBody] SetReminderSettingsRequestModel requestModel)
+    public async Task<IActionResult> SetReminderSettingsAsync([FromBody] SetReminderSettingsRequestModel requestModel,
+        CancellationToken cancellationToken)
     {
-        await setReminderSettingsCommand.ExecuteAsync(requestModel);
+        await setReminderSettingsCommand.ExecuteAsync(requestModel, cancellationToken);
         return Ok();
     }
 
@@ -50,22 +54,26 @@ public class UserController(
     /// <summary>
     /// Обновление настроек напоминаний
     /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPatch("update-reminder-settings")]
     public async Task<IActionResult> UpdateReminderSettingsAsync(
-        [FromBody] UpdateReminderSettingsRequestModel requestModel)
+        [FromBody] UpdateReminderSettingsRequestModel requestModel, CancellationToken cancellationToken)
     {
-        await updateReminderSettingsCommand.ExecuteAsync(requestModel);
+        await updateReminderSettingsCommand.ExecuteAsync(requestModel, cancellationToken);
         return Ok();
     }
 
     /// <summary>
     /// Переключение работы напоминаний
     /// </summary>
+    /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPatch("change-enabled-reminder-settings")]
     public async Task<IActionResult> ChangeEnabledReminderSettingsAsync(
-        [FromBody] ChangeEnabledReminderSettingsRequestModel requestModel)
+        [FromBody] ChangeEnabledReminderSettingsRequestModel requestModel, CancellationToken cancellationToken)
     {
-        await changeEnabledReminderSettingsCommand.ExecuteAsync(requestModel);
+        await changeEnabledReminderSettingsCommand.ExecuteAsync(requestModel, cancellationToken);
         return Ok();
     }
 

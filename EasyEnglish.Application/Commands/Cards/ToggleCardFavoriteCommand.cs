@@ -16,11 +16,11 @@ public class ToggleCardFavoriteCommand(
     ILogger<ToggleCardFavoriteCommand> logger
     )
 {
-    public async Task ExecuteAsync(Guid cardId)
+    public async Task ExecuteAsync(Guid cardId, CancellationToken cancellationToken)
     {
         var card = await cardRepository
             .Include(c => c.CardCollection)
-            .SingleOrDefaultAsync(c => c.Id == cardId);
+            .SingleOrDefaultAsync(c => c.Id == cardId, cancellationToken);
         
         card.ThrowIfNull("Карточка не найдена");
         
@@ -29,7 +29,7 @@ public class ToggleCardFavoriteCommand(
 
         card.IsFavorite = !card.IsFavorite;
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Изменено свойство IsFavorite у карточки с Id: {CardId}. Новое значение: {IsFavorite}. Пользователь: {UserEmail} (Id: {UserId})",
             cardId, card.IsFavorite, userInfoProvider.Email, userInfoProvider.Id);

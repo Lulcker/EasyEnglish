@@ -48,9 +48,9 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
                                                      }
                                                      """;
 
-    private const string MethodTemplate = "public async Task[ReturnType] [MethodName]([Parameters]) =>\n\t\t[CallHttpHelper]";
+    private const string MethodTemplate = "public async Task[ReturnType] [MethodName]([Parameters] = default) =>\n\t\t[CallHttpHelper]";
 
-    private const string CallHttpHelper = "await httpHelper.SendAsync[TRequest|TResponse]([Path], [HttpMethod][RequestModel]);";
+    private const string CallHttpHelper = "await httpHelper.SendAsync[TRequest|TResponse]([Path], [HttpMethod][RequestModel] cancellationToken);";
 
     private const string DependencyService = "services.AddScoped<[ServiceName]>();";
     
@@ -153,7 +153,7 @@ public class ApiEndpointHelperGenerator : ISourceGenerator
             var callHttpHelper = CallHttpHelper
                 .Replace("[TRequest|TResponse]", GetRequestResponseGenericType(requestModel, returnType))
                 .Replace("[HttpMethod]", GetHttpMethod(method))
-                .Replace("[RequestModel]", requestModel is null ? string.Empty : $", {requestModel.Name}")
+                .Replace("[RequestModel]", requestModel is null ? "," : $", {requestModel.Name},")
                 .Replace("[Path]", GetFullPath(basePath, httpMethodPath, parameters));
             
             methods.Add(MethodTemplate

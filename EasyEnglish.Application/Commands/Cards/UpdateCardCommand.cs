@@ -17,7 +17,7 @@ public class UpdateCardCommand(
     ILogger<UpdateCardCommand> logger
     )
 {
-    public async Task ExecuteAsync(UpdateCardRequestModel requestModel)
+    public async Task ExecuteAsync(UpdateCardRequestModel requestModel, CancellationToken cancellationToken)
     {
         requestModel.RuWord.ThrowIfEmpty("Не написано русское слово");
         
@@ -25,7 +25,7 @@ public class UpdateCardCommand(
 
         var card = await cardRepository
             .Include(c => c.CardCollection)
-            .SingleOrDefaultAsync(c => c.Id == requestModel.Id);
+            .SingleOrDefaultAsync(c => c.Id == requestModel.Id, cancellationToken);
         
         card.ThrowIfNull("Карточка не найдена");
         
@@ -35,7 +35,7 @@ public class UpdateCardCommand(
         var existsCard = await cardRepository
             .AsNoTracking()
             .SingleOrDefaultAsync(c => c.CardCollectionId == card.CardCollectionId &&
-                                       c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower());
+                                       c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower(), cancellationToken);
 
         (existsCard is null || existsCard.Id == card.Id)
             .ThrowIfInvalidCondition("Карточка с таким словом уже существует в этой коллекции");
@@ -47,7 +47,7 @@ public class UpdateCardCommand(
                 .Include(c => c.CardCollection)
                 .Where(c => c.CardCollection.UserId == userInfoProvider.Id &&
                                           c.RuWord.ToLower() == requestModel.RuWord.Trim().ToLower())
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
             
             if (existsCardsByRuWord.Count > 0)
                 string.Equals(card.RuWord, requestModel.RuWord, StringComparison.CurrentCultureIgnoreCase)
@@ -60,7 +60,7 @@ public class UpdateCardCommand(
         card.RuWord = requestModel.RuWord.Trim().UppercaseFirstLetter();
         card.EnWord = requestModel.EnWord.Trim().UppercaseFirstLetter();
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Обновлена карточка {OldRuWord} -> {NewRuWord}, {OldEnWord} -> {NewEnWord} пользователем с Email: {UserEmail} (Id: {UserId})",
             oldRuWord, card.RuWord, oldEnWord, card.EnWord, userInfoProvider.Email, userInfoProvider.Id);

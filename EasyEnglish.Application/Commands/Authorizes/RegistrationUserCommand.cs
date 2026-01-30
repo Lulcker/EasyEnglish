@@ -21,7 +21,7 @@ public class RegistrationUserCommand(
     ILogger<LoginUserCommand> logger
     )
 {
-    public async Task<AuthorizeUserResponseModel> ExecuteAsync(RegistrationUserRequestModel requestModel)
+    public async Task<AuthorizeUserResponseModel> ExecuteAsync(RegistrationUserRequestModel requestModel, CancellationToken cancellationToken)
     {
         var firstName = requestModel.FirstName.Trim().UppercaseFirstLetter();
         var email = requestModel.Email.Trim().ToLower();
@@ -37,7 +37,7 @@ public class RegistrationUserCommand(
         (requestModel.Password.Length >= 8)
             .ThrowIfInvalidCondition("Пароль не может быть меньше 8 символов");
         
-        (!await userRepository.AnyAsync(u => u.Email == aesCryptoService.Encrypt(email)))
+        (!await userRepository.AnyAsync(u => u.Email == aesCryptoService.Encrypt(email), cancellationToken))
             .ThrowIfInvalidCondition("Пользователь с такой почтой уже существует");
         
         var passwordSalt = hashService.GenerateSalt();
@@ -51,7 +51,7 @@ public class RegistrationUserCommand(
         };
         
         userRepository.Add(newUser);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Зарегистрирован новый пользователь {UserFirstName}, Email: {UserEmail} (Id: {UserId})",
             newUser.FirstName, email, newUser.Id);

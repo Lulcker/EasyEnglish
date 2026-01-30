@@ -22,7 +22,7 @@ public class SetReminderSettingsCommand(
     ILogger<SetReminderSettingsCommand> logger
     )
 {
-    public async Task ExecuteAsync(SetReminderSettingsRequestModel requestModel)
+    public async Task ExecuteAsync(SetReminderSettingsRequestModel requestModel, CancellationToken cancellationToken)
     {
         switch (requestModel.Mode)
         {
@@ -50,7 +50,7 @@ public class SetReminderSettingsCommand(
         }
         
         var reminderSettings = await reminderSettingsRepository
-            .SingleOrDefaultAsync(u => u.UserId == userInfoProvider.Id);
+            .SingleOrDefaultAsync(u => u.UserId == userInfoProvider.Id, cancellationToken);
         
         (reminderSettings is null)
             .ThrowIfInvalidCondition("Напоминания уже настроены");
@@ -81,7 +81,7 @@ public class SetReminderSettingsCommand(
         reminderSettings.BackgroundJobId = backgroundJobId;
         
         reminderSettingsRepository.Add(reminderSettings);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Установлены настройки напоминаний для пользователя c Email: {UserEmail} (Id: {UserId}) " +
                               "Следующее напоминание через {Delay}", userInfoProvider.Email, userInfoProvider.Id, delay);

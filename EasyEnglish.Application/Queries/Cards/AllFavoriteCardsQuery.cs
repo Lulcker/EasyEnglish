@@ -14,7 +14,7 @@ public class AllFavoriteCardsQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync()
+    public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync(CancellationToken cancellationToken)
     {
         return await cardRepository
             .AsNoTracking()
@@ -28,6 +28,6 @@ public class AllFavoriteCardsQuery(
                 AddedAt = c.AddedAt,
                 IsFavorite = c.IsFavorite
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

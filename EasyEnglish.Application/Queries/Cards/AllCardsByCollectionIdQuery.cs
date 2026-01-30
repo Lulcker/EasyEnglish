@@ -15,13 +15,13 @@ public class AllCardsByCollectionIdQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync(Guid cardCollectionId)
+    public async Task<IReadOnlyCollection<CardResponseModel>> ExecuteAsync(Guid cardCollectionId, CancellationToken cancellationToken)
     {
         var cardCollectionUserId = await cardCollectionRepository
             .AsNoTracking()
             .Where(c => c.Id == cardCollectionId)
             .Select(c => c.UserId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
         
         (cardCollectionUserId == userInfoProvider.Id)
             .ThrowAccessIfInvalidCondition();
@@ -38,6 +38,6 @@ public class AllCardsByCollectionIdQuery(
                 IsFavorite = c.IsFavorite
             })
             .OrderByDescending(c => c.AddedAt)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

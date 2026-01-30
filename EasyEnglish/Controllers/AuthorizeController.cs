@@ -21,19 +21,21 @@ public class AuthorizeController(
     /// Вход пользователя в систему
     /// </summary>
     /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Данные авторизации</returns>
     [HttpPost("login")]
-    public async Task<ActionResult<AuthorizeUserResponseModel>> LoginAsync([FromBody] LoginUserRequestModel requestModel) =>
-        Ok(await loginUserCommand.ExecuteAsync(requestModel));
+    public async Task<ActionResult<AuthorizeUserResponseModel>> LoginAsync([FromBody] LoginUserRequestModel requestModel, CancellationToken cancellationToken) =>
+        Ok(await loginUserCommand.ExecuteAsync(requestModel, cancellationToken));
     
     /// <summary>
     /// Регистрация пользователя в системе
     /// </summary>
     /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Данные авторизации</returns>
     [HttpPost("registration")]
-    public async Task<ActionResult<AuthorizeUserResponseModel>> RegistrationAsync([FromBody] RegistrationUserRequestModel requestModel) =>
-        Ok(await registrationUserCommand.ExecuteAsync(requestModel));
+    public async Task<ActionResult<AuthorizeUserResponseModel>> RegistrationAsync([FromBody] RegistrationUserRequestModel requestModel, CancellationToken cancellationToken) =>
+        Ok(await registrationUserCommand.ExecuteAsync(requestModel, cancellationToken));
 
     #endregion
 }

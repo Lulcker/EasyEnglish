@@ -18,11 +18,11 @@ public class MoveCardCommand(
     ILogger<MoveCardCommand> logger
     )
 {
-    public async Task ExecuteAsync(MoveCardRequestModel requestModel)
+    public async Task ExecuteAsync(MoveCardRequestModel requestModel, CancellationToken cancellationToken)
     {
         var card = await cardRepository
             .Include(c => c.CardCollection)
-            .SingleOrDefaultAsync(c => c.Id == requestModel.CardId);
+            .SingleOrDefaultAsync(c => c.Id == requestModel.CardId, cancellationToken);
         
         card.ThrowIfNull("Карточка не найдена");
         
@@ -35,7 +35,7 @@ public class MoveCardCommand(
         var cardCollection = await cardCollectionRepository
             .AsNoTracking()
             .Include(c => c.Cards)
-            .SingleOrDefaultAsync(c => c.Id == requestModel.CardCollectionId);
+            .SingleOrDefaultAsync(c => c.Id == requestModel.CardCollectionId, cancellationToken);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
         
@@ -49,7 +49,7 @@ public class MoveCardCommand(
         
         card.CardCollectionId = requestModel.CardCollectionId;
 
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Перемещена карточка {CardId} из коллекции {OldCardCollectionTitle} в коллекцию {NewCardCollectionTitle}",
             card.Id, oldCardCollectionTitle, cardCollection.Title);

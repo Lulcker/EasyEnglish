@@ -14,7 +14,7 @@ public class AllCardCollectionsQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<IReadOnlyCollection<CardCollectionResponseModel>> ExecuteAsync()
+    public async Task<IReadOnlyCollection<CardCollectionResponseModel>> ExecuteAsync(CancellationToken cancellationToken)
     {
         return await cardCollectionRepository
             .AsNoTracking()
@@ -28,6 +28,6 @@ public class AllCardCollectionsQuery(
                 CardsCount = c.Cards.Count
             })
             .OrderByDescending(c => c.CreatedAt)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

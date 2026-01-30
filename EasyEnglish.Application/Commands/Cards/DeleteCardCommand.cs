@@ -16,11 +16,11 @@ public class DeleteCardCommand(
     ILogger<DeleteCardCommand> logger
     )
 {
-    public async Task ExecuteAsync(Guid cardId)
+    public async Task ExecuteAsync(Guid cardId, CancellationToken cancellationToken)
     {
         var card = await cardRepository
             .Include(c => c.CardCollection)
-            .SingleOrDefaultAsync(c => c.Id == cardId);
+            .SingleOrDefaultAsync(c => c.Id == cardId, cancellationToken);
         
         card.ThrowIfNull("Карточка не найдена");
         
@@ -28,7 +28,7 @@ public class DeleteCardCommand(
             .ThrowAccessIfInvalidCondition();
         
         cardRepository.Remove(card);
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Карточка с Id: {CardId} удалена пользователем с Email: {UserEmail} (Id: {UserId})",
             cardId, userInfoProvider.Email, userInfoProvider.Id);

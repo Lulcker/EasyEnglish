@@ -28,18 +28,20 @@ public class CardCollectionController(
     /// Получение коллекции карточки по Id
     /// </summary>
     /// <param name="id">Id коллекции</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Коллекция карточек?</returns>
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<CardCollectionResponseModel?>> GetByIdAsync([FromRoute] Guid id) =>
-        Ok(await cardCollectionByIdQuery.ExecuteAsync(id));
+    public async Task<ActionResult<CardCollectionResponseModel?>> GetByIdAsync([FromRoute] Guid id, CancellationToken cancellationToken) =>
+        Ok(await cardCollectionByIdQuery.ExecuteAsync(id, cancellationToken));
 
     /// <summary>
     /// Получение списка коллекций карточек
     /// </summary>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Список коллекций карточек</returns>
     [HttpGet("all")]
-    public async Task<ActionResult<IReadOnlyCollection<CardCollectionResponseModel>>> AllAsync() =>
-        Ok(await allCardCollectionsQuery.ExecuteAsync());
+    public async Task<ActionResult<IReadOnlyCollection<CardCollectionResponseModel>>> AllAsync(CancellationToken cancellationToken) =>
+        Ok(await allCardCollectionsQuery.ExecuteAsync(cancellationToken));
 
     #endregion
 
@@ -49,10 +51,11 @@ public class CardCollectionController(
     /// Создание коллекции
     /// </summary>
     /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Id коллекции</returns>
     [HttpPost("create")]
-    public async Task<ActionResult<Guid>> CreateAsync([FromBody] CreateCardCollectionRequestModel requestModel) =>
-        Ok(await createCardCollectionCommand.ExecuteAsync(requestModel));
+    public async Task<ActionResult<Guid>> CreateAsync([FromBody] CreateCardCollectionRequestModel requestModel, CancellationToken cancellationToken) =>
+        Ok(await createCardCollectionCommand.ExecuteAsync(requestModel, cancellationToken));
 
     #endregion
 
@@ -62,10 +65,11 @@ public class CardCollectionController(
     /// Обновление коллекции
     /// </summary>
     /// <param name="requestModel">Входная модель</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPatch("update")]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCardCollectionRequestModel requestModel)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCardCollectionRequestModel requestModel, CancellationToken cancellationToken)
     {
-        await updateCardCollectionCommand.ExecuteAsync(requestModel);
+        await updateCardCollectionCommand.ExecuteAsync(requestModel, cancellationToken);
         return Ok();
     }
     
@@ -73,10 +77,11 @@ public class CardCollectionController(
     /// Изменение избранности карточки
     /// </summary>
     /// <param name="cardCollectionId">Id коллекции</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPatch("toggle-learned/{cardCollectionId:guid}")]
-    public async Task<IActionResult> ToggleLearnedAsync([FromRoute] Guid cardCollectionId)
+    public async Task<IActionResult> ToggleLearnedAsync([FromRoute] Guid cardCollectionId, CancellationToken cancellationToken)
     {
-        await toggleCardCollectionLearnedCommand.ExecuteAsync(cardCollectionId);
+        await toggleCardCollectionLearnedCommand.ExecuteAsync(cardCollectionId, cancellationToken);
         return Ok();
     }
 
@@ -88,10 +93,11 @@ public class CardCollectionController(
     /// Удаление коллекции
     /// </summary>
     /// <param name="cardCollectionId">ID коллекции</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpDelete("delete/{cardCollectionId:guid}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] Guid cardCollectionId)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid cardCollectionId, CancellationToken cancellationToken)
     {
-        await deleteCardCollectionCommand.ExecuteAsync(cardCollectionId);
+        await deleteCardCollectionCommand.ExecuteAsync(cardCollectionId, cancellationToken);
         return Ok();
     }
 

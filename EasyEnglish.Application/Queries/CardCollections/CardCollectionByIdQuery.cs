@@ -14,12 +14,12 @@ public class CardCollectionByIdQuery(
     IUserInfoProvider userInfoProvider
     )
 {
-    public async Task<CardCollectionResponseModel?> ExecuteAsync(Guid id)
+    public async Task<CardCollectionResponseModel?> ExecuteAsync(Guid id, CancellationToken cancellationToken)
     {
         var cardCollection = await cardCollectionRepository
             .AsNoTracking()
             .Include(c => c.Cards)
-            .SingleOrDefaultAsync(c => c.Id == id);
+            .SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
         
         cardCollection.ThrowIfNull("Коллекция не найдена");
         

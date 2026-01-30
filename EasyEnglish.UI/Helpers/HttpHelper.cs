@@ -30,61 +30,61 @@ public class HttpHelper(
 
     #region Methods
 
-    public async Task<TResponse> SendAsync<TRequest, TResponse>(string path, HttpMethod method, TRequest requestModel)
+    public async Task<TResponse> SendAsync<TRequest, TResponse>(string path, HttpMethod method, TRequest requestModel, CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(method, path);
         request.Content = new StringContent(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json");
 
-        var response = await SendAsync(request);
+        var response = await SendAsync(request, cancellationToken);
         
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<TResponse>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!;
+            return JsonSerializer.Deserialize<TResponse>(await response.Content.ReadAsStringAsync(cancellationToken), JsonSerializerOptions)!;
         
-        await ThrowExceptionAsync(response);
+        await ThrowExceptionAsync(response, cancellationToken);
 
         return default!;
     }
     
-    public async Task SendAsync<TRequest>(string path, HttpMethod method, TRequest requestModel)
+    public async Task SendAsync<TRequest>(string path, HttpMethod method, TRequest requestModel, CancellationToken cancellationToken)
     {
         var request = new HttpRequestMessage(method, path);
         request.Content = new StringContent(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json");
             
-        var response = await SendAsync(request);
+        var response = await SendAsync(request, cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return;
         
-        await ThrowExceptionAsync(response);
+        await ThrowExceptionAsync(response, cancellationToken);
     }
     
-    public async Task<TResponse> SendAsync<TResponse>(string path, HttpMethod method)
+    public async Task<TResponse> SendAsync<TResponse>(string path, HttpMethod method, CancellationToken cancellationToken)
     {
-        var response = await SendAsync(new HttpRequestMessage(method, path));
+        var response = await SendAsync(new HttpRequestMessage(method, path), cancellationToken);
         
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<TResponse>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!;
+            return JsonSerializer.Deserialize<TResponse>(await response.Content.ReadAsStringAsync(cancellationToken), JsonSerializerOptions)!;
         
-        await ThrowExceptionAsync(response);
+        await ThrowExceptionAsync(response, cancellationToken);
 
         return default!;
     }
     
-    public async Task SendAsync(string path, HttpMethod method)
+    public async Task SendAsync(string path, HttpMethod method, CancellationToken cancellationToken)
     {
-        var response = await SendAsync(new HttpRequestMessage(method, path));
+        var response = await SendAsync(new HttpRequestMessage(method, path), cancellationToken);
         
         if (response.IsSuccessStatusCode)
             return;
 
-        await ThrowExceptionAsync(response);
+        await ThrowExceptionAsync(response, cancellationToken);
     }
 
     #endregion
 
     #region Private methods
 
-    private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage)
+    private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {
         if (userSession.Token.IsNotEmpty())
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userSession.Token);
@@ -93,7 +93,7 @@ public class HttpHelper(
         
         try
         {
-            response = await httpClient.SendAsync(requestMessage);
+            response = await httpClient.SendAsync(requestMessage, cancellationToken);
         }
         catch (Exception)
         {
@@ -103,16 +103,16 @@ public class HttpHelper(
         return response;
     }
 
-    private async Task ThrowExceptionAsync(HttpResponseMessage response)
+    private async Task ThrowExceptionAsync(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         switch (response.StatusCode)
         {
             case HttpStatusCode.Forbidden:
                 throw new AccessDeniedException("Доступ запрещён");
             case HttpStatusCode.BadRequest:
-                throw new BusinessException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!.Error);
+                throw new BusinessException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(cancellationToken), JsonSerializerOptions)!.Error);
             case HttpStatusCode.Conflict:
-                throw new ConfirmActionException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(), JsonSerializerOptions)!.Error);
+                throw new ConfirmActionException(JsonSerializer.Deserialize<ErrorResponseModel>(await response.Content.ReadAsStringAsync(cancellationToken), JsonSerializerOptions)!.Error);
             case HttpStatusCode.InternalServerError:
                 throw new InternalServerErrorException("Внутренняя ошибка сервера");
             case HttpStatusCode.Unauthorized:
