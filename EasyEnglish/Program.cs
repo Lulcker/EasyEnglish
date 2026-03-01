@@ -22,6 +22,8 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.MigrateDatabase();
+
 app.MapHangfireDashboard("/hangfire", new DashboardOptions
 {
     Authorization = [new AllowAllDashboardAuthorizationFilter()]
@@ -42,7 +44,5 @@ app.UseUserInfo();
 app.MapMetrics();
 
 app.MapControllers();
-
-app.MigrateDatabase();
 
 app.Run();
