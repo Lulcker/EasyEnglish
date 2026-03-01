@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+        <UserSecretsId>71d65c9d-a00b-49a0-b1f8-b7fe3150f7b6</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
